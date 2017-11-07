@@ -1,3 +1,4 @@
 .env
 .idea/
 bluecollr_venv
+*.pyc
