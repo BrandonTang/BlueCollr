@@ -19,16 +19,19 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://root:@localhost/bluecollr'
+    # SQLALCHEMY_DATABASE_URI = "postgresql://bluecollr:password@localhost/bluecollr"
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://root@localhost/bluecollr'
+    # SQLALCHEMY_DATABASE_URI = "postgresql://bluecollr:password@localhost/bluecollr"
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://root@localhost/bluecollr'
+    # SQLALCHEMY_DATABASE_URI = "postgresql://bluecollr:password@localhost/bluecollr"
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 config = {
