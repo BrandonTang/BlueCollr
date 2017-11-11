@@ -28,6 +28,7 @@ def register():
     :return: HTML page for registration.
     """
     form = RegistrationForm()
+    print(form)
     if form.validate_on_submit():
         user = User(email=(form.email.data).lower(),
                     password=form.password.data,

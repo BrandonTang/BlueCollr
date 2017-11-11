@@ -12,6 +12,12 @@ Login
         <div class="row" style="display: inline-block;">
             {{ wtf.quick_form(form) }}
         </div>
+        <p>
+            Don't have an account?
+            <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.register') }}">
+                Register now!
+            </a>
+        </p>
     </div>
 </section>
 {% endblock %}

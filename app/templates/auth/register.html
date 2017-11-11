@@ -1,11 +1,17 @@
 {% extends "layout/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Register{% endblock %}
+{% block title %}
+Register
+{% endblock %}
 
-{% block body %}
-<div class="well">
-    <h2>Register</h2><br>
-    {{ wtf.quick_form(form) }}
-</div>
+{% block about %}
+<section id="portfolio" style="margin-top: 5%;">
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">Login</h2>
+        <div class="row" style="display: inline-block;">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+</section>
 {% endblock %}
