@@ -1,5 +1,5 @@
-from ..main import main
 from app import db
+from ..main import main
 
 from flask import render_template
 
