@@ -95,13 +95,15 @@ def login():
             db.session.add(user)
             db.session.commit()
             current_app.logger.info('{} successfully logged in'.format(current_user.email))
+            return redirect(url_for('main.index'))
 
         if user:
             current_app.logger.info('{} failed to log in: Invalid username or password'.format(user.email))
             db.session.add(user)
             db.session.commit()
+            flash('Invalid username or password', category='error')
+            return redirect(url_for('auth.login'))
 
-        flash('Invalid username or password', category='error')
     return render_template('auth/login.html', form=form, reset_url=url_for('auth.password_reset_request'))
 
 

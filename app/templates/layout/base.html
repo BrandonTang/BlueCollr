@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -21,7 +20,6 @@
 
     <!-- Custom styles for this template -->
     <link href="/static/css/freelancer.min.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -38,9 +36,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.logout') }}">Logout</a>
+                </li>
+                {% else %}
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.login') }}">Login</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="#about">Profile</a>
                 </li>
@@ -102,7 +106,8 @@
                 </div>
                 <div class="footer-col col-md-4">
                     <h3>About Us</h3>
-                    <p>BlueCollr is a service that allows Blue Collar workers to connect with clients who need Blue Collar jobs done, such as household fixes, broken sinks, electrical work, etc.</p>
+                    <p>BlueCollr is a service that allows Blue Collar workers to connect with clients who need Blue
+                        Collar jobs done, such as household fixes, broken sinks, electrical work, etc.</p>
                 </div>
             </div>
         </div>
