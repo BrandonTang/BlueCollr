@@ -153,3 +153,38 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+    
+class Job(db.Model):
+    """
+    Define the Job class with the following columns and relationships:
+    id -- Column: Integer, PrimaryKey
+    name -- Column: String(64)
+    description -- Column: String(64)
+    status -- Column: String(64)
+    location -- Column: String(64)
+    creator_id -- Column: Integer, ForeignKey = users.id
+    accepted_id -- Column: Integer, ForeignKey = users.id, nullable = True
+    rating -- Column: Integer, nullable = True
+    review -- Column: String(500), nullable = True
+    """
+    __tablename__ = 'jobs'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    description = db.Column(db.String(64))
+    status = db.Column(db.String(64))
+    location = db.Column(db.String(64))
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    accepted_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    rating = db.Column(db.Integer, nullable=True)
+    review = db.Column(db.String(500), nullable=True)
+
+
+class JobRequestor(db.Model):
+    """
+    Define the Job class with the following columns and relationships:
+    requestor_id -- Column: Integer, ForeignKey = users.id, PrimaryKey
+    job_id -- Column: Integer, ForeignKey = jobs.id, PrimaryKey
+    """
+    __tablename__ = 'job_requestors'
+    requestor_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), primary_key=True)
