@@ -12,7 +12,7 @@ from flask_login import login_required, current_user
 @jobs.route('/job/<int:id>', methods=['GET', 'POST'])
 @login_required
 def job(id):
-    chosen_job = Job.query.filter_by(id=id).all()
+    chosen_job = Job.query.filter_by(id=id).all()[0]
     return render_template('jobs/job.html', job=chosen_job)
 
 
@@ -23,8 +23,8 @@ def create():
     if form.validate_on_submit():
         gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
         geocode_result = gmaps.geocode(form.street_name.data + ", " + str(form.zip_code.data))
-        print round(geocode_result[0]['geometry']['location']['lat'], 6)
-        print round(geocode_result[0]['geometry']['location']['lng'], 6)
+        # print round(geocode_result[0]['geometry']['location']['lat'], 6)
+        # print round(geocode_result[0]['geometry']['location']['lng'], 6)
         if geocode_result:
             job = Job(name=form.name.data,
                       description=form.description.data,

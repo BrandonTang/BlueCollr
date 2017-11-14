@@ -9,8 +9,10 @@
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
         <h2 class="text-center">{{ job.name }}</h2>
-        {{ job.description }} <br>
-        {{ job.status }} <br>
+        <hr>
+        Description: {{ job.description }} <br>
+        Status: {{ job.status }} <br>
+        <hr>
     </div>
 </section>
 {% endblock %}
