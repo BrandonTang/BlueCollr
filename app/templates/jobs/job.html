@@ -1,0 +1,16 @@
+{% extends "layout/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+{{ job.name }}
+{% endblock %}
+
+{% block about %}
+<section id="portfolio" style="margin-top: 5%;">
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">{{ job.name }}</h2>
+        {{ job.description }} <br>
+        {{ job.status }} <br>
+    </div>
+</section>
+{% endblock %}
