@@ -6,55 +6,6 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class Permission:
-    """
-    Define the permission codes for certain actions.
-    """
-    COMMENT = 0x02
-    CREATE_JOB = 0x04
-    ACCEPT_JOB = 0x08
-    ADMINISTER = 0x80
-
-
-class Role(db.Model):
-    """
-    Define the Role class with the following columns and relationships:
-    id -- Column: Integer, PrimaryKey
-    name -- Column: String(64), Unique
-    default -- Column: Boolean, Default = False
-    permissions -- Column: Integer
-    users -- Relationship: 'User', 'role'
-    """
-    __tablename__ = 'roles'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
-    default = db.Column(db.Boolean, default=False, index=True)
-    permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role', lazy='dynamic')
-
-    @staticmethod
-    def insert_roles():
-        """Insert permissions for each role: user, worker, and administrator."""
-        roles = {
-            'User': (Permission.COMMENT |
-                     Permission.CREATE_JOB, True),
-            'Worker': (Permission.COMMENT |
-                       Permission.ACCEPT_JOB, False),
-            'Administrator': (0xff, False)
-        }
-        for r in roles:
-            role = Role.query.filter_by(name=r).first()
-            if role is None:
-                role = Role(name=r)
-            role.permissions = roles[r][0]
-            role.default = roles[r][1]
-            db.session.add(role)
-        db.session.commit()
-
-    def __repr__(self):
-        return '<Role %r>' % self.name
-
-
 class User(UserMixin, db.Model):
     """
     Define the User class with the following columns and relationships:
@@ -70,7 +21,6 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
     validated = db.Column(db.Boolean, default=False)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     @property
     def password(self):
@@ -123,27 +73,6 @@ class User(UserMixin, db.Model):
         """
         return check_password_hash(self.password_hash, password)
 
-    def can(self, permissions):
-        """
-        Checks to see if a user has access to certain permissions.
-        :param permissions: An int that specifies the permissions we are checking to see whether or not the user has.
-        :return: True if user is authorized for the given permission, False otherwise.
-        """
-        return self.role is not None and (self.role.permissions & permissions) == permissions
-
-    def can(self, permissions):
-        return self.role is not None and \
-               (self.role.permissions & permissions) == permissions
-
-    def is_administrator(self):
-        return self.can(Permission.ADMINISTER)
-
-    def is_worker(self):
-        return self.can(Permission.COMMENT) and self.can(Permission.ACCEPT_JOB)
-
-    def is_user(self):
-        return self.can(Permission.COMMENT) and self.can(Permission.CREATE_JOB)
-
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
@@ -172,13 +101,19 @@ class Job(db.Model):
     __tablename__ = 'jobs'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    description = db.Column(db.String(64))
+    description = db.Column(db.String(500))
     status = db.Column(db.String(64))
     location = db.Column(db.String(64))
+    longitude = db.Column(db.Float(10))
+    latitude = db.Column(db.Float(10))
+    zipcode = db.Column(db.Integer)
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     accepted_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     rating = db.Column(db.Integer, nullable=True)
     review = db.Column(db.String(500), nullable=True)
+    date_created = db.Column(db.DateTime)
+    date_accepted = db.Column(db.DateTime)
+    date_completed = db.Column(db.DateTime)
 
 
 class JobRequestor(db.Model):
