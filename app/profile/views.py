@@ -1,6 +1,5 @@
 from app import db
-from app.models import User, Role
-from app.decorators import admin_required
+from app.models import User
 from app.email import send_email
 from ..profile import profile
 # from ..profile.forms import (

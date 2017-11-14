@@ -7,8 +7,16 @@
 {% endblock title %}
 
 {% block about %}
-    SDFKJ:LKDSL:FKJS:FLKJSD:LFKJDS:LFKJSDFLKSJDFL
-    {{ current_user.first_name }}
-    {{ current_user.last_name }}
-    {{ current_user.email }}
+<section id="portfolio" style="margin-top: 5%;">
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">Profile</h2>
+        <div class="row" style="display: inline-block;">
+            {{ current_user.first_name }}
+            <br />
+            {{ current_user.last_name }}
+            <br />
+            {{ current_user.email }}
+        </div>
+    </div>
+</section>
 {% endblock %}
