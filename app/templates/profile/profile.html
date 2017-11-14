@@ -11,6 +11,12 @@
     <div class="container" style="text-align: center;">
         <h2 class="text-center">Profile</h2>
         <div class="row" style="display: inline-block;">
+
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="{{ url_for('profile.edit_profile', user_id=current_user.id) }}">Edit Profile</a>
+            </li>
+
             {{ current_user.first_name }}
             <br />
             {{ current_user.last_name }}
