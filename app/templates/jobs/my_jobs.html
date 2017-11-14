@@ -1,0 +1,29 @@
+{% extends "layout/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+My Jobs
+{% endblock %}
+
+{% block about %}
+<section id="portfolio" style="margin-top: 5%;">
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">My Jobs</h2>
+        {% for job in jobs %}
+        <div class="row" style="display: inline-block;">
+            {{ job.name }} <br>
+            {{ job.description }} <br>
+            {{ job.status }} <br>
+            {% for worker in jobs[job] %}
+            <a href="{{ url_for('profile', id=requestor.id) }}">
+                <span class="label label-primary">View</span>
+            </a>
+            <a href="{{ url_for('jobs.accept', requestor_id=worker.requestor_id, job_id=worker.job_id) }}">
+                <span class="label label-primary">Accept</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
