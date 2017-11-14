@@ -9,8 +9,9 @@ class Config:
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = os.environ.get('MAIL_PORT')
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS')
-    MAIL_SUBJECT_PREFIX = os.environ.get('FLASKY_MAIL_SUBJECT_PREFIX')
+    MAIL_SUBJECT_PREFIX = os.environ.get('MAIL_SUBJECT_PREFIX')
     MAIL_SENDER = os.environ.get('FLASKY_MAIL_SENDER')
+    MAPS_API = os.environ.get('MAPS_API')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod
@@ -20,18 +21,15 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    # SQLALCHEMY_DATABASE_URI = "postgresql://bluecollr:password@localhost/bluecollr"
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class TestingConfig(Config):
     TESTING = True
-    # SQLALCHEMY_DATABASE_URI = "postgresql://bluecollr:password@localhost/bluecollr"
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class ProductionConfig(Config):
-    # SQLALCHEMY_DATABASE_URI = "postgresql://bluecollr:password@localhost/bluecollr"
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 

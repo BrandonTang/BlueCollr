@@ -3,7 +3,9 @@ from app.models import Job, JobRequestor
 from ..jobs import jobs
 from ..jobs.forms import CreateJobForm, ReviewJobForm
 
-from flask import render_template
+import googlemaps
+import datetime
+from flask import render_template, current_app, redirect, url_for, flash
 from flask_login import login_required, current_user
 
 
@@ -19,14 +21,26 @@ def job(id):
 def create():
     form = CreateJobForm()
     if form.validate_on_submit():
-        job = Job(name=form.name.data,
-                  description=form.description.data,
-                  status="Pending",
-                  creator_id=current_user.id)
-        db.session.add(job)
-        db.session.commit()
-        flash('Job successfully created!', category='success')
-        return redirect(url_for('jobs.browse'))
+        gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
+        geocode_result = gmaps.geocode(form.street_name.data + ", " + str(form.zip_code.data))
+        print round(geocode_result[0]['geometry']['location']['lat'], 6)
+        print round(geocode_result[0]['geometry']['location']['lng'], 6)
+        if geocode_result:
+            job = Job(name=form.name.data,
+                      description=form.description.data,
+                      status="Pending",
+                      location=form.street_name.data,
+                      longitude=round(geocode_result[0]['geometry']['location']['lng'], 6),
+                      latitude=round(geocode_result[0]['geometry']['location']['lat'], 6),
+                      zipcode=form.zip_code.data,
+                      creator_id=current_user.id,
+                      date_created=datetime.datetime.now())
+            db.session.add(job)
+            db.session.commit()
+            flash('Job successfully created!', category='success')
+            return redirect(url_for('jobs.browse'))
+        flash('Invalid Address! Please enter a valid address.', category='success')
+        return redirect(url_for('jobs.create'))
     return render_template('jobs/create.html', form=form)
 
 

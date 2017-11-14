@@ -5,10 +5,10 @@ from wtforms.validators import DataRequired, Length
 
 
 class CreateJobForm(Form):
-    name = StringField('Job Name', validators=[DataRequired(), Length(1, 64)])
-    description = StringField('Email', validators=[DataRequired(), Length(1, 300)])
+    name = StringField('Job Name', validators=[DataRequired(), Length(1, 500)])
+    description = StringField('Description', validators=[DataRequired(), Length(1, 300)])
     street_name = StringField('Street Name', validators=[DataRequired(), Length(1, 64)])
-    zip_code = IntegerField('Zip Code', validators=[DataRequired(), Length(5, 5)])
+    zip_code = IntegerField('Zip Code', validators=[DataRequired()])
     submit = SubmitField('Create Job')
 
 
