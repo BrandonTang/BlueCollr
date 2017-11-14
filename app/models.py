@@ -172,10 +172,9 @@ class Job(db.Model):
     __tablename__ = 'jobs'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    description = db.Column(db.String(300))
+    description = db.Column(db.String(64))
     status = db.Column(db.String(64))
-    latitude = db.Column(db.Integer)
-    longitude = db.Column(db.Integer)
+    location = db.Column(db.String(64))
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     accepted_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     rating = db.Column(db.Integer, nullable=True)
