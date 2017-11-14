@@ -112,8 +112,8 @@ class Job(db.Model):
     rating = db.Column(db.Integer, nullable=True)
     review = db.Column(db.String(500), nullable=True)
     date_created = db.Column(db.DateTime)
-    date_accepted = db.Column(db.DateTime)
-    date_completed = db.Column(db.DateTime)
+    date_accepted = db.Column(db.DateTime, nullable=True)
+    date_completed = db.Column(db.DateTime, nullable=True)
 
 
 class JobRequestor(db.Model):

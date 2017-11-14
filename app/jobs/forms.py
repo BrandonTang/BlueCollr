@@ -1,14 +1,14 @@
 from flask import current_app
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SubmitField, IntegerField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, NumberRange
 
 
 class CreateJobForm(Form):
-    name = StringField('Job Name', validators=[DataRequired(), Length(1, 64)])
-    description = StringField('Email', validators=[DataRequired(), Length(1, 300)])
+    name = StringField('Job Name', validators=[DataRequired(), Length(1, 500)])
+    description = StringField('Description', validators=[DataRequired(), Length(1, 300)])
     street_name = StringField('Street Name', validators=[DataRequired(), Length(1, 64)])
-    zip_code = IntegerField('Zip Code', validators=[DataRequired(), Length(5, 5)])
+    zip_code = IntegerField('Zip Code', validators=[DataRequired()])
     submit = SubmitField('Create Job')
 
 
