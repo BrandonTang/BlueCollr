@@ -36,11 +36,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('jobs.browse') }}">Jobs</a>
+                </li>
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="{{ url_for('profile.profile', user_id=current_user.id) }}">Profile</a>
+                    <a class="nav-link js-scroll-trigger"
+                       href="{{ url_for('profile.profile', user_id=current_user.id) }}">Profile</a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.logout') }}">Logout</a>
                 </li>
@@ -49,9 +52,6 @@
                     <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.login') }}">Login</a>
                 </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#contact">Jobs</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -78,7 +78,7 @@
                 <div class="footer-col col-md-4">
                     <h3>Location</h3>
                     <p>6 Metrotech Center
-                        <br>Brooklyn, NY 69420</p>
+                        <br>Brooklyn, NY 11201</p>
                 </div>
                 <div class="footer-col col-md-4">
                     <h3>Around the Web</h3>

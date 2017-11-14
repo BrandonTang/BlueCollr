@@ -23,71 +23,45 @@ Home
         <h2 class="text-center">Prior Work Portfolio</h2>
         <hr class="star-primary">
         <div class="row">
-            <div class="col-sm-4 portfolio-item">
-                <a class="portfolio-link" href="#portfolioModal1" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
+            <div class="col-sm-6 portfolio-item">
+                <a class="portfolio-link">
                     <center>BEFORE</center>
                     <img class="img-fluid" src="static/img/homes/before_1.jpg" alt="">
                 </a>
             </div>
-            <div class="col-sm-4 portfolio-item">
-                <a class="portfolio-link" href="#portfolioModal2" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
-                    <center>BEFORE</center>
-                    <img class="img-fluid" src="static/img/homes/before_2.jpg" alt="">
-                </a>
-            </div>
-            <div class="col-sm-4 portfolio-item">
-                <a class="portfolio-link" href="#portfolioModal3" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
-                    <center>BEFORE</center>
-                    <img class="img-fluid" src="static/img/homes/before_3.jpg" alt="">
-                </a>
-            </div>
-            <div class="col-sm-4 portfolio-item">
-                <a class="portfolio-link" href="#portfolioModal4" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
+            <div class="col-sm-6 portfolio-item">
+                <a class="portfolio-link">
                     <center>AFTER</center>
                     <img class="img-fluid" src="static/img/homes/after_1.jpg" alt="">
                 </a>
             </div>
-            <div class="col-sm-4 portfolio-item">
-                <a class="portfolio-link" href="#portfolioModal5" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 portfolio-item">
+                <a class="portfolio-link">
+                    <center>BEFORE</center>
+                    <img class="img-fluid" src="static/img/homes/before_2.jpg" alt="">
+                </a>
+            </div>
+            <div class="col-sm-6 portfolio-item">
+                <a class="portfolio-link">
                     <center>AFTER</center>
                     <img class="img-fluid" src="static/img/homes/after_2.jpg" alt="">
                 </a>
             </div>
-            <div class="col-sm-4 portfolio-item">
-                <a class="portfolio-link" href="#portfolioModal6" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 portfolio-item">
+                <a class="portfolio-link">
+                    <center>BEFORE</center>
+                    <img class="img-fluid" src="static/img/homes/before_3.jpg" alt="">
+                </a>
+            </div>
+            <div class="col-sm-6 portfolio-item">
+                <div class="portfolio-link">
                     <center>AFTER</center>
                     <img class="img-fluid" src="static/img/homes/after_3.jpg" alt="">
-                </a>
+                </div>
             </div>
         </div>
     </div>
@@ -109,12 +83,14 @@ Home
                 <p>Whether you're a Blue Collar professional looking to find a job, a homeowner with a problem, or
                     just looking for some work to do on the side, Blue Collar is the perfect place to find work or get it done!</p>
             </div>
+            {% if not current_user.is_authenticated %}
             <div class="col-lg-8 mx-auto text-center">
                 <a href="{{ url_for('auth.register') }}" class="btn btn-lg btn-outline">
                     <i class="fa fa-user"></i>
                     Sign Up!
                 </a>
             </div>
+            {% endif %}
         </div>
     </div>
 </section>

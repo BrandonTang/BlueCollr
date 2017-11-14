@@ -1,7 +1,7 @@
 from flask import current_app
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SubmitField, IntegerField
-from wtforms.validators import DataRequired, Length, NumberRange
+from wtforms.validators import DataRequired, Length
 
 
 class CreateJobForm(Form):

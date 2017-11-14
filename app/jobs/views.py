@@ -3,10 +3,10 @@ from app.models import Job, JobRequestor
 from ..jobs import jobs
 from ..jobs.forms import CreateJobForm, ReviewJobForm
 
-from flask import render_template, current_app, redirect, url_for, flash
-from flask_login import login_required, current_user
 import googlemaps
 import datetime
+from flask import render_template, current_app, redirect, url_for, flash
+from flask_login import login_required, current_user
 
 
 @jobs.route('/<int:id>', methods=['GET', 'POST'])
@@ -39,7 +39,7 @@ def create():
             db.session.commit()
             flash('Job successfully created!', category='success')
             return redirect(url_for('jobs.browse'))
-        flash('Invalid Address! Please enter a valid Address.', category='success')
+        flash('Invalid Address! Please enter a valid address.', category='success')
         return redirect(url_for('jobs.create'))
     return render_template('jobs/create.html', form=form)
 
