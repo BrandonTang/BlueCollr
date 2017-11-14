@@ -9,7 +9,7 @@ from flask import render_template, current_app, redirect, url_for, flash
 from flask_login import login_required, current_user
 
 
-@jobs.route('/<int:id>', methods=['GET', 'POST'])
+@jobs.route('/job/<int:id>', methods=['GET', 'POST'])
 @login_required
 def job(id):
     chosen_job = Job.query.filter_by(id=id).all()
