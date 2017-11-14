@@ -11,7 +11,9 @@ class Config:
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS')
     MAIL_SUBJECT_PREFIX = os.environ.get('FLASKY_MAIL_SUBJECT_PREFIX')
     MAIL_SENDER = os.environ.get('FLASKY_MAIL_SENDER')
+    MAPS_API = os.environ.get('MAPS_API')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
 
     @staticmethod
     def init_app(app):
