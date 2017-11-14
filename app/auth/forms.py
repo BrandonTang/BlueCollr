@@ -1,5 +1,4 @@
 from ..models import User
-from ..utils import roles
 
 from flask import current_app
 from flask_wtf import FlaskForm as Form
@@ -69,25 +68,25 @@ class RegistrationForm(Form):
             raise ValidationError('Password must contain at least one capital letter')
 
 
-class AdminRegistrationForm(Form):
-    """Used by admins to register new users into the system."""
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
-    first_name = StringField("First name")
-    last_name = StringField("Last name")
-    role = SelectField('Role', choices=roles, validators=[DataRequired()])
-
-    submit = SubmitField('Register')
-
-    def validate_email(self, email_field):
-        """
-        Verifies that e-mails used for registration do not already exist in the system.
-
-        :param email_field:
-        :return:
-        """
-        if User.query.filter_by(email=email_field.data).first():
-            raise ValidationError('An account with this email address already exists')
-        return True
+# class AdminRegistrationForm(Form):
+#     """Used by admins to register new users into the system."""
+#     email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+#     first_name = StringField("First name")
+#     last_name = StringField("Last name")
+#     role = SelectField('Role', choices=roles, validators=[DataRequired()])
+#
+#     submit = SubmitField('Register')
+#
+#     def validate_email(self, email_field):
+#         """
+#         Verifies that e-mails used for registration do not already exist in the system.
+#
+#         :param email_field:
+#         :return:
+#         """
+#         if User.query.filter_by(email=email_field.data).first():
+#             raise ValidationError('An account with this email address already exists')
+#         return True
 
 
 class ChangePasswordForm(Form):

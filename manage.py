@@ -5,11 +5,14 @@ from flask import Flask
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
-from app.models import User
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
+
+with app.app_context():
+    from app.models import *
+
 manager = Manager(app)
 migrate = Migrate(app, db)
 

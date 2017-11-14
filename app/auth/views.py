@@ -1,12 +1,10 @@
 from app import db
-from app.models import User, Role
-from app.decorators import admin_required
+from app.models import User
 from app.email import send_email
 from ..auth import auth
 from ..auth.forms import (
     LoginForm,
     RegistrationForm,
-    AdminRegistrationForm,
     PasswordResetForm,
     PasswordResetRequestForm,
     ChangePasswordForm
@@ -42,40 +40,40 @@ def register():
     return render_template('auth/register.html', form=form)
 
 
-@auth.route('/admin_register', methods=['GET', 'POST'])
-@admin_required
-def admin_register():
-    """
-    Renders a form for admins to register new users.
-
-    :return: HTML page where admins can register new users
-    """
-    form = AdminRegistrationForm()
-    if form.validate_on_submit():
-        temp_password = datetime.today().strftime('%A%-d')
-
-        user = User(email=(form.email.data).lower(),
-                    password=temp_password,
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    role=Role.query.filter_by(name=form.role.data).first()
-                    )
-        db.session.add(user)
-        db.session.commit()
-        current_app.logger.info('{} successfully registered user with email {}'.format(current_user.email, user.email))
-
-        send_email(user.email,
-                   'BlueCollr - New User Registration',
-                   'auth/email/new_user',
-                   user=user,
-                   temp_password=temp_password)
-
-        flash('User successfully registered.\nAn email with login instructions has been sent to {}'.format(user.email),
-              category='success')
-
-        return redirect(url_for('main.index'))
-
-    return render_template('auth/admin_register.html', form=form)
+# @auth.route('/admin_register', methods=['GET', 'POST'])
+# @admin_required
+# def admin_register():
+#     """
+#     Renders a form for admins to register new users.
+#
+#     :return: HTML page where admins can register new users
+#     """
+#     form = AdminRegistrationForm()
+#     if form.validate_on_submit():
+#         temp_password = datetime.today().strftime('%A%-d')
+#
+#         user = User(email=(form.email.data).lower(),
+#                     password=temp_password,
+#                     first_name=form.first_name.data,
+#                     last_name=form.last_name.data,
+#                     role=Role.query.filter_by(name=form.role.data).first()
+#                     )
+#         db.session.add(user)
+#         db.session.commit()
+#         current_app.logger.info('{} successfully registered user with email {}'.format(current_user.email, user.email))
+#
+#         send_email(user.email,
+#                    'BlueCollr - New User Registration',
+#                    'auth/email/new_user',
+#                    user=user,
+#                    temp_password=temp_password)
+#
+#         flash('User successfully registered.\nAn email with login instructions has been sent to {}'.format(user.email),
+#               category='success')
+#
+#         return redirect(url_for('main.index'))
+#
+#     return render_template('auth/admin_register.html', form=form)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
