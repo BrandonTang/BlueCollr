@@ -1,0 +1,17 @@
+{% extends "layout/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Create Job
+{% endblock %}
+
+{% block about %}
+<section id="portfolio" style="margin-top: 5%;">
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">Create Job</h2>
+        <div class="row" style="display: inline-block;">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+</section>
+{% endblock %}

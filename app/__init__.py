@@ -46,4 +46,7 @@ def create_app(config_name):
     from .profile import profile as profile_blueprint
     app.register_blueprint(profile_blueprint, url_prefix='/profile')
 
+    from .jobs import jobs as jobs_blueprint
+    app.register_blueprint(jobs_blueprint, url_prefix='/jobs')
+
     return app
