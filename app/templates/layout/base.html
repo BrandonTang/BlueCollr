@@ -38,6 +38,10 @@
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('profile.profile', user_id=current_user.id) }}">Profile</a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.logout') }}">Logout</a>
                 </li>
                 {% else %}
@@ -45,9 +49,6 @@
                     <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.login') }}">Login</a>
                 </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#about">Profile</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="#contact">Jobs</a>
                 </li>

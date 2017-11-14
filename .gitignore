@@ -2,3 +2,4 @@
 .idea/
 bluecollr_venv
 *.pyc
+migrations/.DS_Store
