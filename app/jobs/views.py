@@ -1,9 +1,11 @@
 from app import db
 from app.models import Job, JobRequestor, User
 from ..jobs import jobs
-from ..jobs.forms import CreateJobForm, ReviewJobForm
+from ..jobs.forms import CreateJobForm, ReviewJobForm, ZipFilterForm
 
+import operator
 import googlemaps
+from geopy.distance import vincenty
 import datetime
 from flask import render_template, current_app, redirect, url_for, flash
 from flask_login import login_required, current_user
@@ -52,7 +54,21 @@ def browse():
     for job_id in requested_ids:
         requested_jobs.append(Job.query.filter_by(id=job_id.job_id).all()[0])
     other_jobs = list(set(Job.query.all()) - set(requested_jobs))
-    return render_template('jobs/browse.html', other=other_jobs, requested=requested_jobs)
+    form = ZipFilterForm()
+    if form.validate_on_submit():
+        gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
+        geocode_result = gmaps.geocode("Zip Code:" + str(form.zip_code.data))
+        if geocode_result:
+            location = (round(geocode_result[0]['geometry']['location']['lat'], 6), round(geocode_result[0]['geometry']['location']['lng'], 6))
+            distances = {}
+            for job in other_jobs:
+                job_location = (job.latitude, job.longitude)
+                distances[job] = float("{0:.1f}".format(vincenty(location, job_location).miles))
+            other_jobs_by_distance = sorted(distances.items(), key=operator.itemgetter(1))
+            return render_template('jobs/browse.html', other_sorted=other_jobs_by_distance, requested=requested_jobs, form=form)
+        flash('Invalid Zip Code! Please enter a valid Zip Code.', category='success')
+        return render_template('jobs/browse.html', other=other_jobs, requested=requested_jobs, form=form)
+    return render_template('jobs/browse.html', other=other_jobs, requested=requested_jobs, form=form)
 
 
 @jobs.route('/my_jobs', methods=['GET', 'POST'])
