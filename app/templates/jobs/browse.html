@@ -15,6 +15,8 @@ Browse Jobs
             Name: {{ job.name }} <br>
             Date Created: {{ job.date_created }} <br>
             Description: {{ job.description }} <br>
+            Street Name: {{ job.location }} <br>
+            Zip Code: {{ job.zipcode }} <br>
             Status: {{ job.status }} <br>
             <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
                style="background-color: #0300b0; color: white;">
@@ -36,6 +38,8 @@ Browse Jobs
             Name: {{ job.name }} <br>
             Date Created: {{ job.date_created }} <br>
             Description: {{ job.description }} <br>
+            Street Name: {{ job.location }} <br>
+            Zip Code: {{ job.zipcode }} <br>
             Status: {{ job.status }} <br>
             <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
                style="background-color: #0300b0; color: white;">
@@ -61,6 +65,8 @@ Browse Jobs
             Name: {{ job[0].name }} <br>
             Date Created: {{ job[0].date_created }} <br>
             Description: {{ job[0].description }} <br>
+            Street Name: {{ job[0].location }} <br>
+            Zip Code: {{ job[0].zipcode }} <br>
             Status: {{ job[0].status }} <br>
             Distance: {{ job[1] }} miles <br>
             <a href="{{ url_for('jobs.job', id=job[0].id) }}" class="btn btn-lg btn-outline"

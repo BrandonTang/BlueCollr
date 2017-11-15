@@ -86,7 +86,7 @@ def my_jobs():
                                 "worker_name": worker_name.first_name + ' ' + worker_name.last_name,
                                 "job_id": worker.job_id})
         worker_list[job] = worker_info
-    print worker_list
+    # print worker_list
     return render_template('jobs/my_jobs.html', jobs=worker_list)
 
 
