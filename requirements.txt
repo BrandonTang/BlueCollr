@@ -15,6 +15,7 @@ Flask-PageDown==0.2.2
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
+geopy==1.11.0
 googlemaps==2.5.1
 idna==2.6
 itsdangerous==0.24
