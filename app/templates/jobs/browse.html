@@ -8,8 +8,8 @@ Browse Jobs
 {% block about %}
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
-        <h2 class="text-center">Browse Jobs</h2>
-        {% for job in jobs %}
+        <h2 class="text-center">Requested Jobs</h2>
+        {% for job in requested %}
         <hr>
         <div class="row" style="display: inline-block; margin: 1%;">
             Name: {{ job.name }} <br>
@@ -20,6 +20,33 @@ Browse Jobs
                 <i class="fa fa-street-view"></i>
                 View
             </a>
+        </div>
+        {% endfor %}
+        <hr>
+    </div>
+
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">Browse Jobs</h2>
+        {% for job in other %}
+        <hr>
+        <div class="row" style="display: inline-block; margin: 1%;">
+            Name: {{ job.name }} <br>
+            Description: {{ job.description }} <br>
+            Status: {{ job.status }} <br>
+            <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+               style="background-color: #0300b0; color: white;">
+                <i class="fa fa-street-view"></i>
+                View
+            </a>
+
+            {% if job.creator_id != current_user.id %}
+            <a href="{{ url_for('jobs.request', job_id=job.id, requestor_id=current_user.id) }}"
+               class="btn btn-lg btn-outline"
+               style="background-color: #45ad50; color: white;">
+                <i class="fa fa-check"></i>
+                Request
+            </a>
+            {% endif %}
         </div>
         {% endfor %}
         <hr>

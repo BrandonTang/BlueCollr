@@ -1,5 +1,5 @@
 from app import db
-from app.models import Job, JobRequestor
+from app.models import Job, JobRequestor, User
 from ..jobs import jobs
 from ..jobs.forms import CreateJobForm, ReviewJobForm
 
@@ -47,8 +47,12 @@ def create():
 @jobs.route('/browse', methods=['GET', 'POST'])
 @login_required
 def browse():
-    all_jobs = Job.query.all()
-    return render_template('jobs/browse.html', jobs=all_jobs)
+    requested_jobs = []
+    requested_ids = JobRequestor.query.filter_by(requestor_id=current_user.id).all()
+    for job_id in requested_ids:
+        requested_jobs.append(Job.query.filter_by(id=job_id.job_id).all()[0])
+    other_jobs = list(set(Job.query.all()) - set(requested_jobs))
+    return render_template('jobs/browse.html', other=other_jobs, requested=requested_jobs)
 
 
 @jobs.route('/my_jobs', methods=['GET', 'POST'])
@@ -58,15 +62,31 @@ def my_jobs():
     worker_list = {}
     for job in job_list:
         current_job = job.id
-        all_workers = JobRequestor.query.filter_by(job_id=current_job)
-        worker_list[job] = all_workers
+        worker_info = []
+        worker_ids = JobRequestor.query.filter_by(job_id=current_job).all()
+        for worker in worker_ids:
+            worker_name = User.query.filter_by(id=worker.requestor_id).all()[0]
+            worker_info.append({"worker_id": worker.requestor_id,
+                                "worker_name": worker_name.first_name + ' ' + worker_name.last_name,
+                                "job_id": worker.job_id})
+        worker_list[job] = worker_info
+    print worker_list
     return render_template('jobs/my_jobs.html', jobs=worker_list)
 
 
-@jobs.route('/accept/<int:requestor_id>/<int:job_id>', methods=['GET', 'POST'])
+@jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
 @login_required
-def accept(requestor_id, job_id):
-    accepting_job = Job.query.filter_by(job_id=job_id)
+def request(job_id, requestor_id):
+    job_request = JobRequestor(requestor_id=requestor_id, job_id=job_id)
+    db.session.add(job_request)
+    db.session.commit()
+    return redirect(url_for('jobs.browse'))
+
+
+@jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
+@login_required
+def accept(job_id, requestor_id):
+    accepting_job = Job.query.filter_by(job_id=job_id).all()[0]
     accepting_job.accepted_id = requestor_id
     db.session.commit()
     return redirect(url_for('jobs.my_jobs'))
