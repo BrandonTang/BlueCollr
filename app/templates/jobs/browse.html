@@ -1,12 +1,6 @@
 {% extends "layout/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{{ bluecollr_jobs_map.js }}
-
-<!-- Custom Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-
 {% block title %}
 Browse Jobs
 {% endblock %}
@@ -36,10 +30,8 @@ Browse Jobs
 
     <div class="container" style="text-align: center;">
         <h2 class="text-center">Browse Jobs</h2>
-        <div class="col-lg-8 col-lg-offset-2" style="height:500px;">
-            {{ bluecollr_jobs_map.html }}
-        </div>
 
+        {{ bluecollr_jobs_map.html }}
 
         <br>
         To filter jobs by distance, enter a zip code below.
@@ -69,7 +61,6 @@ Browse Jobs
             {% endif %}
         </div>
         {% endfor %}
-        <hr>
 
         {% for job in other_sorted %}
         <hr>
@@ -108,3 +99,7 @@ Browse Jobs
     </div>
 </section>
 {% endblock %}
+
+{% block scripts %}
+{{ bluecollr_jobs_map.js }}
+{% endblock %}}

@@ -98,13 +98,14 @@ def browse():
         lng=-73.98656399999999,
         markers=markers_list,
         scroll_wheel=False,
-        # style="height:100%;width:100%;"
+        style="height:50vh;width:100%;margin:3% 0%;"
     )
     if form.validate_on_submit():
         gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
         geocode_result = gmaps.geocode("Zip Code:" + str(form.zip_code.data))
         if geocode_result:
-            location = (round(geocode_result[0]['geometry']['location']['lat'], 6), round(geocode_result[0]['geometry']['location']['lng'], 6))
+            location = (round(geocode_result[0]['geometry']['location']['lat'], 6),
+                        round(geocode_result[0]['geometry']['location']['lng'], 6))
             markers_list = [{
                 'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
                 'lat': round(geocode_result[0]['geometry']['location']['lat'], 6),
@@ -118,17 +119,20 @@ def browse():
                 lng=geocode_result[0]['geometry']['location']['lng'],
                 markers=markers_list,
                 scroll_wheel=False,
-                # style="height:60%;width:100%;color:black;"
+                style="height:50vh;width:100%;margin:3% 0%;"
             )
             distances = {}
             for job in other_jobs:
                 job_location = (job.latitude, job.longitude)
                 distances[job] = float("{0:.1f}".format(vincenty(location, job_location).miles))
             other_jobs_by_distance = sorted(distances.items(), key=operator.itemgetter(1))
-            return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other_sorted=other_jobs_by_distance, requested=requested_jobs, form=form)
+            return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map,
+                                   other_sorted=other_jobs_by_distance, requested=requested_jobs, form=form)
         flash('Invalid Zip Code! Please enter a valid Zip Code.', category='success')
-        return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs, requested=requested_jobs, form=form)
-    return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs, requested=requested_jobs, form=form)
+        return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs,
+                               requested=requested_jobs, form=form)
+    return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs,
+                           requested=requested_jobs, form=form)
 
 
 @jobs.route('/my_jobs', methods=['GET', 'POST'])
