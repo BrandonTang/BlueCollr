@@ -1,6 +1,5 @@
 from app import db
 from app.models import User
-from app.email import send_email
 from ..profile import profile
 from ..profile.forms import (
     EditForm
@@ -8,57 +7,37 @@ from ..profile.forms import (
 
 from flask import render_template, current_app, redirect, request, url_for, flash, session
 from flask_login import login_required, login_user, logout_user, current_user
-from datetime import datetime
-from werkzeug.security import check_password_hash
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 @profile.route('/<user_id>', methods=['GET', 'POST'])
 @login_required
 def view_profile(user_id):
-    """
-
-    """
-
     user = User.query.filter_by(id=user_id).first()
-    # form = RegistrationForm()
-    # print(form)
-    # if form.validate_on_submit():
-    #     user = User(email=(form.email.data).lower(),
-    #                 password=form.password.data,
-    #                 first_name=form.first_name.data,
-    #                 last_name=form.last_name.data,
-    #                 validated=True)
-    #     db.session.add(user)
-    #     db.session.commit()
-    #     flash('User successfully registered', category='success')
-    #     return redirect(url_for('auth.login'))
     return render_template('profile/profile.html', user=user)
 
 
 @profile.route('/<user_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_profile(user_id):
-    """
-
-    """
-
     form = EditForm()
-
     user = User.query.filter_by(id=user_id).first()
 
+    if request.method == 'GET':
+        # Pre-populate form
+        form.first_name.data = user.first_name
+        form.last_name.data = user.last_name
+        form.email.data = user.email
+
     if form.validate_on_submit():
-        # Get info from form
-        user_first_name = form.first_name.data
-        user_last_name = form.last_name.data
-        user_email = form.email.data
-
-        # Modify the database
-        current_user.first_name = user_first_name
-        current_user.last_name = user_last_name
-        current_user.email = user_email
-
+        # Get info from form and modify
+        if form.first_name != user.first_name:
+            current_user.first_name = form.first_name.data
+        if form.last_name != user.last_name:
+            current_user.last_name = form.last_name.data
+        if form.email != user.email:
+            current_user.email = form.email.data
         db.session.commit()
+
         flash('User information successfully updated!')
         return redirect(url_for('profile.view_profile', user_id=user.id))
     return render_template('profile/edit.html', form=form, user=user)
