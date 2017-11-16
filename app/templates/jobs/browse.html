@@ -30,6 +30,10 @@ Browse Jobs
 
     <div class="container" style="text-align: center;">
         <h2 class="text-center">Browse Jobs</h2>
+
+        {{ bluecollr_jobs_map.html }}
+
+        <br>
         To filter jobs by distance, enter a zip code below.
         {{ wtf.quick_form(form) }}
         {% for job in other %}
@@ -57,7 +61,6 @@ Browse Jobs
             {% endif %}
         </div>
         {% endfor %}
-        <hr>
 
         {% for job in other_sorted %}
         <hr>
@@ -96,3 +99,7 @@ Browse Jobs
     </div>
 </section>
 {% endblock %}
+
+{% block scripts %}
+{{ bluecollr_jobs_map.js }}
+{% endblock %}}
