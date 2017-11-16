@@ -8,22 +8,33 @@ My Jobs
 {% block about %}
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
-        <h2 class="text-center">My Jobs</h2>
+        <h2 class="text-center">Requested Jobs</h2>
         {% for job in jobs %}
-        <div class="row" style="display: inline-block;">
-            {{ job.name }} <br>
-            {{ job.description }} <br>
-            {{ job.status }} <br>
-            {% for worker in jobs[job] %}
-            <a href="{{ url_for('profile', id=requestor.id) }}">
-                <span class="label label-primary">View</span>
+        <hr>
+        <div class="row" style="display: inline-block; margin: 1%;">
+            Name: {{ job.name }} <br>
+            Date Created: {{ job.date_created }} <br>
+            Description: {{ job.description }} <br>
+            Street Name: {{ job.location }} <br>
+            Zip Code: {{ job.zipcode }} <br>
+            Status: {{ job.status }} <br>
+            {% if jobs[job] > 0 %}
+            {% if jobs[job] == 1 %}
+            {{ jobs[job] }} request
+            {% else %}
+            {{ jobs[job] }} requests
+            {% endif %}
+            <br>
+            {% endif %}
+            <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+               style="background-color: #0300b0; color: white;">
+                <i class="fa fa-street-view"></i>
+                View
             </a>
-            <a href="{{ url_for('jobs.accept', requestor_id=worker.requestor_id, job_id=worker.job_id) }}">
-                <span class="label label-primary">Accept</span>
-            </a>
-            {% endfor %}
         </div>
         {% endfor %}
+    </div>
+        <hr>
     </div>
 </section>
 {% endblock %}

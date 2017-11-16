@@ -8,17 +8,91 @@ Browse Jobs
 {% block about %}
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
-        <h2 class="text-center">Browse Jobs</h2>
-        {% for job in jobs %}
-        <div class="row" style="display: inline-block;">
-            {{ job.name }} <br>
-            {{ job.description }} <br>
-            {{ job.status }} <br>
-            <a href="{{ url_for('jobs', id=job.id) }}">
-                <span class="label label-primary">View</span>
+        <h2 class="text-center">Requested Jobs</h2>
+        {% for job in requested %}
+        <hr>
+        <div class="row" style="display: inline-block; margin: 1%;">
+            Name: {{ job.name }} <br>
+            Date Created: {{ job.date_created }} <br>
+            Description: {{ job.description }} <br>
+            Street Name: {{ job.location }} <br>
+            Zip Code: {{ job.zipcode }} <br>
+            Status: {{ job.status }} <br>
+            <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+               style="background-color: #0300b0; color: white;">
+                <i class="fa fa-street-view"></i>
+                View
             </a>
         </div>
         {% endfor %}
+        <hr>
+    </div>
+
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">Browse Jobs</h2>
+        To filter jobs by distance, enter a zip code below.
+        {{ wtf.quick_form(form) }}
+        {% for job in other %}
+        <hr>
+        <div class="row" style="display: inline-block; margin: 1%;">
+            Name: {{ job.name }} <br>
+            Date Created: {{ job.date_created }} <br>
+            Description: {{ job.description }} <br>
+            Street Name: {{ job.location }} <br>
+            Zip Code: {{ job.zipcode }} <br>
+            Status: {{ job.status }} <br>
+            <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+               style="background-color: #0300b0; color: white;">
+                <i class="fa fa-street-view"></i>
+                View
+            </a>
+
+            {% if job.creator_id != current_user.id %}
+            <a href="{{ url_for('jobs.request', job_id=job.id, requestor_id=current_user.id) }}"
+               class="btn btn-lg btn-outline"
+               style="background-color: #45ad50; color: white;">
+                <i class="fa fa-check"></i>
+                Request
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <hr>
+
+        {% for job in other_sorted %}
+        <hr>
+        <div class="row" style="display: inline-block; margin: 1%;">
+            Name: {{ job[0].name }} <br>
+            Date Created: {{ job[0].date_created }} <br>
+            Description: {{ job[0].description }} <br>
+            Street Name: {{ job[0].location }} <br>
+            Zip Code: {{ job[0].zipcode }} <br>
+            Status: {{ job[0].status }} <br>
+            Distance: {{ job[1] }} miles <br>
+            <a href="{{ url_for('jobs.job', id=job[0].id) }}" class="btn btn-lg btn-outline"
+               style="background-color: #0300b0; color: white;">
+                <i class="fa fa-street-view"></i>
+                View
+            </a>
+
+            {% if job[0].creator_id != current_user.id %}
+            <a href="{{ url_for('jobs.request', job_id=job[0].id, requestor_id=current_user.id) }}"
+               class="btn btn-lg btn-outline"
+               style="background-color: #45ad50; color: white;">
+                <i class="fa fa-check"></i>
+                Request
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <hr>
+
+        <br>
+        <a href="{{ url_for('jobs.create') }}" class="btn btn-lg btn-outline"
+           style="background-color: #2c3e50; color: white;">
+            <i class="fa fa-user"></i>
+            Post Job
+        </a>
     </div>
 </section>
 {% endblock %}
