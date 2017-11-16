@@ -74,7 +74,7 @@ def browse():
     form = ZipFilterForm()
     if form.validate_on_submit():
         gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
-        geocode_result = gmaps.geocode("Zip Code:" + str(form.zip_code.data))
+        geocode_result = gmaps.geocosde("Zip Code:" + str(form.zip_code.data))
         if geocode_result:
             location = (round(geocode_result[0]['geometry']['location']['lat'], 6), round(geocode_result[0]['geometry']['location']['lng'], 6))
             distances = {}
@@ -109,7 +109,7 @@ def my_jobs():
     return render_template('jobs/my_jobs.html', jobs=jobs, accepted=accepted_ids)
 
 
-@jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
+@jobs.route('/accept_request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
 @login_required
 def accept_request(job_id, requestor_id):
     job = Job.query.filter_by(id=job_id).first()
@@ -117,7 +117,9 @@ def accept_request(job_id, requestor_id):
     job.date_accepted = datetime.datetime.now()
     job.status = status.ACCEPTED
     db.session.commit()
-    return render_template('jobs/job.html', job=job)
+
+    requestor = User.query.filter_by(id=requestor_id).first()
+    return render_template('jobs/job.html', job=job, acceptor=requestor)
 
 
 @jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
@@ -127,6 +129,7 @@ def request(job_id, requestor_id):
     db.session.add(job_request)
     db.session.commit()
     return redirect(url_for('jobs.browse'))
+    # return render_template('jobs/browse.html')
 
 
 @jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
