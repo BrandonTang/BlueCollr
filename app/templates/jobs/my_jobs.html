@@ -18,12 +18,18 @@ My Jobs
             Street Name: {{ job.location }} <br>
             Zip Code: {{ job.zipcode }} <br>
             Status: {{ job.status }} <br>
-            {% if jobs[job] > 0 %}
+            {% if job.status == 'Pending' %}
             {% if jobs[job] == 1 %}
             {{ jobs[job] }} request
             {% else %}
             {{ jobs[job] }} requests
             {% endif %}
+            <br>
+            {% endif %}
+            {% if job.status == 'Accepted' %}
+            Accepted by: <a href="{{ url_for('profile.view_profile', user_id=job.accepted_id) }}">
+            {{ accepted[job.accepted_id].first_name }} {{ accepted[job.accepted_id].last_name }}
+            </a>
             <br>
             {% endif %}
             <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"

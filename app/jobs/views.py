@@ -2,6 +2,7 @@ from app import db
 from app.models import Job, JobRequestor, User
 from ..jobs import jobs
 from ..jobs.forms import CreateJobForm, ReviewJobForm, ZipFilterForm
+from ..constants import status
 
 import operator
 import googlemaps
@@ -15,7 +16,7 @@ from flask_login import login_required, current_user
 @login_required
 def job(id):
     chosen_job = Job.query.filter_by(id=id).first()
-    if chosen_job.creator_id == current_user.id:
+    if chosen_job.status == status.PENDING and chosen_job.creator_id == current_user.id:
         job_requests = JobRequestor.query.filter_by(job_id=id).all()
         requestors = []
         for query in job_requests:
@@ -23,6 +24,11 @@ def job(id):
             requestors.append(requestor)
 
         return render_template('jobs/job.html', job=chosen_job, requestors=requestors)
+
+    elif chosen_job.status == status.ACCEPTED:
+        acceptor = User.query.filter_by(id=chosen_job.accepted_id).first()
+
+        return render_template('jobs/job.html', job=chosen_job, acceptor=acceptor)
 
     return render_template('jobs/job.html', job=chosen_job)
 
@@ -39,7 +45,7 @@ def create():
         if geocode_result:
             job = Job(name=form.name.data,
                       description=form.description.data,
-                      status="Pending",
+                      status=status.PENDING,
                       location=form.street_name.data,
                       longitude=round(geocode_result[0]['geometry']['location']['lng'], 6),
                       latitude=round(geocode_result[0]['geometry']['location']['lat'], 6),
@@ -61,8 +67,10 @@ def browse():
     requested_jobs = []
     requested_ids = JobRequestor.query.filter_by(requestor_id=current_user.id).all()
     for job_id in requested_ids:
-        requested_jobs.append(Job.query.filter_by(id=job_id.job_id).all()[0])
-    other_jobs = list(set(Job.query.all()) - set(requested_jobs))
+        requested_job = Job.query.filter_by(id=job_id.job_id, status=status.PENDING).first()
+        if requested_job is not None:
+            requested_jobs.append(requested_job)
+    other_jobs = list(set(Job.query.filter_by(status=status.PENDING).all()) - set(requested_jobs))
     form = ZipFilterForm()
     if form.validate_on_submit():
         gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
@@ -90,19 +98,26 @@ def my_jobs():
         request_counts.append(len(request_count))
 
     jobs = dict(zip(job_list, request_counts))
-    # worker_list = {}
-    # for job in job_list:
-    #     current_job = job.id
-    #     worker_info = []
-    #     worker_ids = JobRequestor.query.filter_by(job_id=current_job).all()
-    #     for worker in worker_ids:
-    #         worker_name = User.query.filter_by(id=worker.requestor_id).all()[0]
-    #         worker_info.append({"worker_id": worker.requestor_id,
-    #                             "worker_name": worker_name.first_name + ' ' + worker_name.last_name,
-    #                             "job_id": worker.job_id})
-    #     worker_list[job] = worker_info
-    # print worker_list
-    return render_template('jobs/my_jobs.html', jobs=jobs)
+
+    accepted_ids = {}
+    for job in job_list:
+        if job.status == status.ACCEPTED:
+            acceptor = User.query.filter_by(id=job.accepted_id).first()
+            accepted_ids[acceptor.id] = acceptor
+
+    print(accepted_ids)
+    return render_template('jobs/my_jobs.html', jobs=jobs, accepted=accepted_ids)
+
+
+@jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
+@login_required
+def accept_request(job_id, requestor_id):
+    job = Job.query.filter_by(id=job_id).first()
+    job.accepted_id = requestor_id
+    job.date_accepted = datetime.datetime.now()
+    job.status = status.ACCEPTED
+    db.session.commit()
+    return render_template('jobs/job.html', job=job)
 
 
 @jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
