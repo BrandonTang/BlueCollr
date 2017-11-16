@@ -15,7 +15,16 @@ from flask_googlemaps import Map
 @jobs.route('/job/<int:id>', methods=['GET', 'POST'])
 @login_required
 def job(id):
-    chosen_job = Job.query.filter_by(id=id).all()[0]
+    chosen_job = Job.query.filter_by(id=id).first()
+    if chosen_job.creator_id == current_user.id:
+        job_requests = JobRequestor.query.filter_by(job_id=id).all()
+        requestors = []
+        for query in job_requests:
+            requestor = User.query.filter_by(id=query.requestor_id).first()
+            requestors.append(requestor)
+
+        return render_template('jobs/job.html', job=chosen_job, requestors=requestors)
+
     return render_template('jobs/job.html', job=chosen_job)
 
 
@@ -126,19 +135,25 @@ def browse():
 @login_required
 def my_jobs():
     job_list = Job.query.filter_by(creator_id=current_user.id).all()
-    worker_list = {}
+    request_counts = []
     for job in job_list:
-        current_job = job.id
-        worker_info = []
-        worker_ids = JobRequestor.query.filter_by(job_id=current_job).all()
-        for worker in worker_ids:
-            worker_name = User.query.filter_by(id=worker.requestor_id).all()[0]
-            worker_info.append({"worker_id": worker.requestor_id,
-                                "worker_name": worker_name.first_name + ' ' + worker_name.last_name,
-                                "job_id": worker.job_id})
-        worker_list[job] = worker_info
+        request_count = JobRequestor.query.filter_by(job_id=job.id).all()
+        request_counts.append(len(request_count))
+
+    jobs = dict(zip(job_list, request_counts))
+    # worker_list = {}
+    # for job in job_list:
+    #     current_job = job.id
+    #     worker_info = []
+    #     worker_ids = JobRequestor.query.filter_by(job_id=current_job).all()
+    #     for worker in worker_ids:
+    #         worker_name = User.query.filter_by(id=worker.requestor_id).all()[0]
+    #         worker_info.append({"worker_id": worker.requestor_id,
+    #                             "worker_name": worker_name.first_name + ' ' + worker_name.last_name,
+    #                             "job_id": worker.job_id})
+    #     worker_list[job] = worker_info
     # print worker_list
-    return render_template('jobs/my_jobs.html', jobs=worker_list)
+    return render_template('jobs/my_jobs.html', jobs=jobs)
 
 
 @jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
@@ -153,7 +168,7 @@ def request(job_id, requestor_id):
 @jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
 @login_required
 def accept(job_id, requestor_id):
-    accepting_job = Job.query.filter_by(job_id=job_id).all()[0]
+    accepting_job = Job.query.filter_by(job_id=job_id).first()
     accepting_job.accepted_id = requestor_id
     db.session.commit()
     return redirect(url_for('jobs.my_jobs'))
