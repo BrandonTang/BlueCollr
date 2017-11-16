@@ -13,19 +13,19 @@ class EditForm(Form):
     last_name = StringField("Last Name")
     submit = SubmitField('Edit')
 
-    def validate_email(self, email_field):
-        """
-        Verifies that e-mails used for registration do not already exist in the system.
-
-        :param email_field:
-        :return:
-        """
-        user = User.query.filter_by(email=email_field.data).first()
-        if user:
-            if user.email:
-                current_app.logger.error('{} tried to register user with email {} but user already exists.'.format(
-                    user.email, email_field.data))
-            else:
-                current_app.logger.error('Anonymous user tried to register user with email {} but user already exists.'.
-                                         format(email_field.data))
-            raise ValidationError('An account with this email address already exists')
+    # def validate_email(self, email_field):
+    #     """
+    #     Verifies that e-mails used for registration do not already exist in the system.
+    #
+    #     :param email_field:
+    #     :return:
+    #     """
+    #     user = User.query.filter_by(email=email_field.data).first()
+    #     if user:
+    #         if user.email:
+    #             current_app.logger.error('{} tried to register user with email {} but user already exists.'.format(
+    #                 user.email, email_field.data))
+    #         else:
+    #             current_app.logger.error('Anonymous user tried to register user with email {} but user already exists.'.
+    #                                      format(email_field.data))
+    #         raise ValidationError('An account with this email address already exists')
