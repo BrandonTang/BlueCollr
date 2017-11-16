@@ -12,6 +12,7 @@ class Config:
     MAIL_SUBJECT_PREFIX = os.environ.get('MAIL_SUBJECT_PREFIX')
     MAIL_SENDER = os.environ.get('FLASKY_MAIL_SENDER')
     MAPS_API = os.environ.get('MAPS_API')
+    GMAP_JS_API = os.environ.get('GOOGLEMAPS_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod
