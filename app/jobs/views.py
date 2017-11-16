@@ -74,7 +74,7 @@ def browse():
     other_jobs = list(set(Job.query.filter_by(status=status.PENDING).all()) - set(requested_jobs))
     form = ZipFilterForm()
     markers_list = [{
-        'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+        'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
         'lat': 40.6939904,
         'lng': -73.98656399999999,
         'infobox': "BlueCollr HQ"
@@ -114,12 +114,12 @@ def browse():
         if geocode_result:
             location = (round(geocode_result[0]['geometry']['location']['lat'], 6),
                         round(geocode_result[0]['geometry']['location']['lng'], 6))
-            markers_list = [{
+            markers_list.append({
                 'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
                 'lat': round(geocode_result[0]['geometry']['location']['lat'], 6),
                 'lng': round(geocode_result[0]['geometry']['location']['lng'], 6),
                 'infobox': "Current Location"
-            }]
+            })
             bluecollr_jobs_map = Map(
                 identifier="bluecollr_map",
                 zoom=16,
