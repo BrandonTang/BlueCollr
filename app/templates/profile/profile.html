@@ -11,15 +11,17 @@ Profile
         <h2 class="text-center">Profile</h2>
         <hr>
         <div class="row" style="display: inline-block; margin: 1%;">
-            Name: {{ current_user.first_name }} {{ current_user.last_name }} <br>
-            Email: {{ current_user.email }} <br>
+            Name: {{ user.first_name }} {{ user.last_name }} <br>
+            Email: {{ user.email }} <br>
         </div>
         <hr>
+        {% if user.id == current_user.id %}
         <a href="{{ url_for('profile.edit_profile', user_id=current_user.id) }}" class="btn btn-lg btn-outline"
            style="background-color: #2c3e50; color: white;">
             <i class="fa fa-user"></i>
             Edit Profile
         </a>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

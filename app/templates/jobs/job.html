@@ -18,5 +18,20 @@
             Status: {{ job.status }} <br>
         <hr>
     </div>
+    <div class="container" style="text-align: center;">
+        <h2 class="text-center">Requests</h2>
+        {% for requestor in requestors %}
+        <hr>
+        <div class="row" style="display: inline-block; margin: 1%;">
+            <a href="{{ url_for('profile.view_profile', user_id=requestor.id) }}">{{ requestor.first_name }} {{ requestor.last_name }}</a><br>
+            <a href="{{ url_for('profile.view_profile', user_id=requestor.id) }}" class="btn btn-lg btn-outline"
+               style="background-color: #0300b0; color: white;">
+                <i class="fa fa-street-view"></i>
+                View
+            </a>
+        </div>
+        {% endfor %}
+        <hr>
+    </div>
 </section>
 {% endblock %}

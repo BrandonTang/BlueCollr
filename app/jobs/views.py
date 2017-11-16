@@ -14,7 +14,16 @@ from flask_login import login_required, current_user
 @jobs.route('/job/<int:id>', methods=['GET', 'POST'])
 @login_required
 def job(id):
-    chosen_job = Job.query.filter_by(id=id).all()[0]
+    chosen_job = Job.query.filter_by(id=id).first()
+    if chosen_job.creator_id == current_user.id:
+        job_requests = JobRequestor.query.filter_by(job_id=id).all()
+        requestors = []
+        for query in job_requests:
+            requestor = User.query.filter_by(id=query.requestor_id).first()
+            requestors.append(requestor)
+
+        return render_template('jobs/job.html', job=chosen_job, requestors=requestors)
+
     return render_template('jobs/job.html', job=chosen_job)
 
 
@@ -102,7 +111,7 @@ def request(job_id, requestor_id):
 @jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
 @login_required
 def accept(job_id, requestor_id):
-    accepting_job = Job.query.filter_by(job_id=job_id).all()[0]
+    accepting_job = Job.query.filter_by(job_id=job_id).first()
     accepting_job.accepted_id = requestor_id
     db.session.commit()
     return redirect(url_for('jobs.my_jobs'))
