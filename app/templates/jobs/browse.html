@@ -9,6 +9,15 @@ Browse Jobs
 <section id="portfolio" style="margin-top: 5%;">
 
     <div class="container" style="text-align: center;">
+    <h5 style="color: darkblue;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+    </h5>
         <h2 class="text-center">Browse Jobs</h2>
 
         {{ bluecollr_jobs_map.html }}

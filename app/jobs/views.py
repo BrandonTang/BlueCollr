@@ -192,23 +192,28 @@ def my_jobs():
 @login_required
 def accept_request(job_id, requestor_id):
     job = Job.query.filter_by(id=job_id).first()
-    job.accepted_id = requestor_id
-    job.date_accepted = datetime.datetime.now()
-    job.status = status.ACCEPTED
-    db.session.commit()
+    if current_user.id == job.creator_id:
+        job.accepted_id = requestor_id
+        job.date_accepted = datetime.datetime.now()
+        job.status = status.ACCEPTED
+        db.session.commit()
 
-    requestor = User.query.filter_by(id=requestor_id).first()
-    return render_template('jobs/job.html', job=job, acceptor=requestor)
+        requestor = User.query.filter_by(id=requestor_id).first()
+        return render_template('jobs/job.html', job=job, acceptor=requestor)
+    flash("Please do not try to accept jobs for other people!")
+    return url_for('jobs/job.html', job=job)
 
 
 @jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
 @login_required
 def request(job_id, requestor_id):
-    job_request = JobRequestor(requestor_id=requestor_id, job_id=job_id)
-    db.session.add(job_request)
-    db.session.commit()
+    if current_user.id == requestor_id:
+        job_request = JobRequestor(requestor_id=requestor_id, job_id=job_id)
+        db.session.add(job_request)
+        db.session.commit()
+        return redirect(url_for('jobs.browse'))
+    flash("Please do not try to sign other people up for jobs!")
     return redirect(url_for('jobs.browse'))
-    # return render_template('jobs/browse.html')
 
 
 @jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
@@ -226,3 +231,15 @@ def review(id):
     current_job = Job.query.filter_by(id=id).all()
     form = ReviewJobForm()
     return render_template('jobs/review.html', job=current_job, form=form)
+
+@jobs.route('/complete/<int:job_id>', methods=['GET', 'POST'])
+@login_required
+def complete(job_id):
+    job = Job.query.filter_by(id=job_id).first()
+    if current_user.id == job.creator_id:
+        job.date_completed = datetime.datetime.now()
+        job.status = status.COMPLETED
+        db.session.commit()
+        return redirect(url_for('jobs.my_jobs'))
+    flash("Please do not try to mark other peoples jobs as complete!")
+    return redirect(url_for('jobs.my_jobs'))

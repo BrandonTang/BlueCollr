@@ -8,6 +8,15 @@
 {% block about %}
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
+        <h5 style="color: darkblue;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </h5>
         <h2 class="text-center">{{ job.name }}</h2>
         <hr>
             Name: {{ job.name }} <br>
@@ -27,8 +36,15 @@
             {% if job.status == 'Accepted' %}
             Accepted by: <a href="{{ url_for('profile.view_profile', user_id=acceptor.id) }}">
             {{ acceptor.first_name }} {{ acceptor.last_name }}
+            </a><br>
+            {% if job.creator_id == current_user.id %}
+            <a href="{{ url_for('jobs.complete', job_id=job.id) }}"
+               class="btn btn-lg btn-outline"
+               style="background-color: #45ad50; color: white;">
+                <i class="fa fa-check"></i>
+                Complete
             </a>
-            <br>
+            {% endif %}
             {% endif %}
         <hr>
     </div>
