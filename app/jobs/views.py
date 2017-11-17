@@ -26,6 +26,14 @@ def job(id):
 
         return render_template('jobs/job.html', job=chosen_job, requestors=requestors)
 
+    elif chosen_job.status == status.PENDING:
+        requested = False
+        job_request = JobRequestor.query.filter_by(job_id=id, requestor_id=current_user.id).first()
+        if job_request is not None:
+            requested = True
+
+        return render_template('jobs/job.html', job=chosen_job, requested=requested)
+
     elif chosen_job.status == status.ACCEPTED:
         acceptor = User.query.filter_by(id=chosen_job.accepted_id).first()
 
@@ -135,12 +143,28 @@ def browse():
                 distances[job] = float("{0:.1f}".format(vincenty(location, job_location).miles))
             other_jobs_by_distance = sorted(distances.items(), key=operator.itemgetter(1))
             return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map,
-                                   other_sorted=other_jobs_by_distance, requested=requested_jobs, form=form)
+                                   other_sorted=other_jobs_by_distance, form=form)
         flash('Invalid Zip Code! Please enter a valid Zip Code.', category='success')
-        return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs,
-                               requested=requested_jobs, form=form)
-    return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs,
-                           requested=requested_jobs, form=form)
+        return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs, form=form)
+    return render_template('jobs/browse.html', bluecollr_jobs_map=bluecollr_jobs_map, other=other_jobs, form=form)
+
+
+@jobs.route('/my_requests', methods=['GET', 'POST'])
+@login_required
+def my_requests():
+    accepted_jobs = Job.query.filter_by(accepted_id=current_user.id).\
+        filter((Job.status == status.ACCEPTED) |
+               (Job.status == status.CREATOR_VER) |
+               (Job.status == status.WORKER_VER)).all()
+
+    requested_jobs = []
+    requested_ids = JobRequestor.query.filter_by(requestor_id=current_user.id).all()
+    for job_id in requested_ids:
+        requested_job = Job.query.filter_by(id=job_id.job_id, status=status.PENDING).first()
+        if requested_job is not None:
+            requested_jobs.append(requested_job)
+
+    return render_template('jobs/my_requests.html', accepted_jobs=accepted_jobs, requested_jobs=requested_jobs)
 
 
 @jobs.route('/my_jobs', methods=['GET', 'POST'])

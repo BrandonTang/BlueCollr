@@ -37,15 +37,18 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="{{ url_for('jobs.browse') }}">Jobs</a>
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('jobs.browse') }}">Browse</a>
                 </li>
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="{{ url_for('jobs.my_jobs') }}">Pending</a>
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('jobs.my_requests') }}">My Requests</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('jobs.my_jobs') }}">My Jobs</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger"
-                       href="{{ url_for('profile.view_profile', user_id=current_user.id) }}">Profile</a>
+                       href="{{ url_for('profile.view_profile', user_id=current_user.id) }}">{{ current_user.first_name }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="{{ url_for('auth.logout') }}">Logout</a>
