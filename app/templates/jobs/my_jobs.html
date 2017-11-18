@@ -43,7 +43,7 @@ My Jobs
             {% endif %}
             <br>
             {% endif %}
-            {% if job.status == 'Accepted' %}
+            {% if job.status != 'Pending' %}
             Accepted by: <a href="{{ url_for('profile.view_profile', user_id=job.accepted_id) }}">
             {{ accepted[job.accepted_id].first_name }} {{ accepted[job.accepted_id].last_name }}
             </a>

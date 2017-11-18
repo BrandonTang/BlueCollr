@@ -31,18 +31,18 @@
             {% if job.status == 'Pending' and form is defined %}
             {{ wtf.quick_form(form) }}
             {% endif %}
-            {% if job.status == 'Accepted' %}
+            {% if job.status != 'Pending' %}
             Accepted by: <a href="{{ url_for('profile.view_profile', user_id=acceptor.id) }}">
             {{ acceptor.first_name }} {{ acceptor.last_name }}
             </a><br>
-            {% if job.creator_id == current_user.id %}
+            {% endif %}
+            {% if job.status == 'Accepted' and job.creator_id == current_user.id %}
             <a href="{{ url_for('jobs.complete', job_id=job.id) }}"
                class="btn btn-lg btn-outline"
                style="background-color: #45ad50; color: white;">
                 <i class="fa fa-check"></i>
                 Complete
             </a>
-            {% endif %}
             {% endif %}
         <hr>
     </div>

@@ -46,7 +46,7 @@ def job(id):
 
         return render_template('jobs/job.html', job=chosen_job, form=price_form)
 
-    elif chosen_job.status == status.ACCEPTED:
+    elif chosen_job.status != status.PENDING:
         acceptor = User.query.filter_by(id=chosen_job.accepted_id).first()
 
         return render_template('jobs/job.html', job=chosen_job, acceptor=acceptor)
