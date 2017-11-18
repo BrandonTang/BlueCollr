@@ -1,5 +1,5 @@
 from app import db
-from app.models import User
+from app.models import User, Job
 from ..profile import profile
 from ..profile.forms import (
     EditForm
@@ -7,13 +7,15 @@ from ..profile.forms import (
 
 from flask import render_template, current_app, redirect, request, url_for, flash, session
 from flask_login import login_required, login_user, logout_user, current_user
+from ..constants import status
 
 
 @profile.route('/<user_id>', methods=['GET', 'POST'])
 @login_required
 def view_profile(user_id):
     user = User.query.filter_by(id=user_id).first()
-    return render_template('profile/profile.html', user=user)
+    jobs_completed = Job.query.filter_by(accepted_id=user_id, status=status.COMPLETED)
+    return render_template('profile/profile.html', user=user, jobs_completed=jobs_completed)
 
 
 @profile.route('/<user_id>/edit', methods=['GET', 'POST'])
