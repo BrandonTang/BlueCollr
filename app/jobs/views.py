@@ -247,6 +247,10 @@ def quick_request(job_id, requestor_id):
 def review(job_id):
     job = Job.query.filter_by(id=job_id).first()
     form = ReviewJobForm()
+    # form.rating(class_="star-cb-group")
+    print(form.rating)
+    print(form.review)
+    print(form.submit)
     if form.validate_on_submit():
         if current_user.id == job.creator_id:
             job.rating = int(form.rating.data)

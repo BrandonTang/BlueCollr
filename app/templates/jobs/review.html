@@ -5,7 +5,12 @@
 Job Review
 {% endblock %}
 
+{% block css %}
+<link href="/static/css/stars.css" rel="stylesheet">
+{% endblock %}
+
 {% block about %}
+
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
         <h2 class="text-center">Job Review</h2>
@@ -13,7 +18,9 @@ Job Review
         Job Description: {{ job.description }} <br>
         <br>
         <div class="row" style="display: inline-block;">
-            {{ wtf.quick_form(form) }}
+            {{ form.rating }}
+            {{ form.review }}
+            {{ form.submit }}
         </div>
     </div>
 </section>

@@ -1,6 +1,6 @@
 from flask import current_app
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, SubmitField, IntegerField, DecimalField, SelectField
+from wtforms import StringField, SubmitField, IntegerField, DecimalField, RadioField
 from wtforms.validators import DataRequired, Length, ValidationError
 
 
@@ -25,8 +25,44 @@ class CreateJobForm(Form):
     submit = SubmitField('Create Job')
 
 
+class StarField(RadioField):
+    def __init__(self, *args, **kwargs):
+        super(StarField, self).__init__(*args, **kwargs)
+        self.label = 'Rating (1-5)'
+        self.choices = [('5', '5'), ('4', '4'), ('3', '3'), ('2', '2'), ('1', '1')]
+        self.validators = [DataRequired()]
+
+    def __str__(self):
+
+        ans = '<span class="star-cb-group">'
+
+        for choice in self.choices:
+            ans += '<input type="radio" id="rating-' + choice[0] + \
+                   '" name="rating" value="' + choice[0] + \
+                   '" /><label for="rating-' + choice[0] + \
+                   '">' + choice[0] + '</label>'
+        ans += '</span>'
+        return ans
+
+    def __call__(self):
+
+        ans = '<span class="star-cb-group">'
+
+        for choice in self.choices:
+            ans += '<input type="radio" id="rating-' + choice[0] + \
+                   '" name="rating" value="' + choice[0] + \
+                   '" /><label for="rating-' + choice[0] + \
+                   '">' + choice[0] + '</label>'
+        ans += '</span>'
+        return ans
+
+
 class ReviewJobForm(Form):
-    rating = SelectField('Rating (1-5)', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
+    def __init__(self, *args, **kwargs):
+        super(ReviewJobForm, self).__init__(*args, **kwargs)
+
+    # rating = RadioField('Rating (1-5)', choices=[('5', '5'), ('4', '4'), ('3', '3'), ('2', '2'), ('1', '1')])
+    rating = StarField()
     review = StringField('Review', validators=[DataRequired(), Length(1, 500)])
     submit = SubmitField('Submit Review')
 
