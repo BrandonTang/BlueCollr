@@ -29,6 +29,9 @@ My Jobs
             Name: {{ job.name }} <br>
             Date Created: {{ job.date_created }} <br>
             Description: {{ job.description }} <br>
+            {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+            Price: {{ "$%.2f"|format(job.price) }} <br>
+            {% endif %}
             Street Name: {{ job.location }} <br>
             Zip Code: {{ job.zipcode }} <br>
             Status: {{ job.status }} <br>

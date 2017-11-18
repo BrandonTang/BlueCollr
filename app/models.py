@@ -102,6 +102,7 @@ class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(500))
+    price = db.Column(db.Float(10))
     status = db.Column(db.String(64))
     location = db.Column(db.String(64))
     longitude = db.Column(db.Float(10))
@@ -125,3 +126,4 @@ class JobRequestor(db.Model):
     __tablename__ = 'job_requestors'
     requestor_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), primary_key=True)
+    price = db.Column(db.Float(10))

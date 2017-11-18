@@ -31,6 +31,9 @@ Browse Jobs
             Name: {{ job.name }} <br>
             Date Created: {{ job.date_created }} <br>
             Description: {{ job.description }} <br>
+            {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+            Price: {{ "$%.2f"|format(job.price) }} <br>
+            {% endif %}
             Street Name: {{ job.location }} <br>
             Zip Code: {{ job.zipcode }} <br>
             Status: {{ job.status }} <br>
@@ -41,11 +44,11 @@ Browse Jobs
             </a>
 
             {% if job.creator_id != current_user.id %}
-            <a href="{{ url_for('jobs.request', job_id=job.id, requestor_id=current_user.id) }}"
+            <a href="{{ url_for('jobs.quick_request', job_id=job.id, requestor_id=current_user.id) }}"
                class="btn btn-lg btn-outline"
                style="background-color: #45ad50; color: white;">
                 <i class="fa fa-check"></i>
-                Request
+                Quick Request
             </a>
             {% endif %}
         </div>
@@ -57,6 +60,9 @@ Browse Jobs
             Name: {{ job[0].name }} <br>
             Date Created: {{ job[0].date_created }} <br>
             Description: {{ job[0].description }} <br>
+            {% if job[0].status == 'Pending' or current_user.id == job[0].creator_id or current_user.id == job[0].accepted_id %}
+            Price: {{ "$%.2f"|format(job[0].price) }} <br>
+            {% endif %}
             Street Name: {{ job[0].location }} <br>
             Zip Code: {{ job[0].zipcode }} <br>
             Status: {{ job[0].status }} <br>
@@ -68,7 +74,7 @@ Browse Jobs
             </a>
 
             {% if job[0].creator_id != current_user.id %}
-            <a href="{{ url_for('jobs.request', job_id=job[0].id, requestor_id=current_user.id) }}"
+            <a href="{{ url_for('jobs.quick_request', job_id=job[0].id, requestor_id=current_user.id) }}"
                class="btn btn-lg btn-outline"
                style="background-color: #45ad50; color: white;">
                 <i class="fa fa-check"></i>

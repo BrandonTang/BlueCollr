@@ -1,7 +1,7 @@
 from app import db
 from app.models import Job, JobRequestor, User
 from ..jobs import jobs
-from ..jobs.forms import CreateJobForm, ReviewJobForm, ZipFilterForm
+from ..jobs.forms import CreateJobForm, ReviewJobForm, ZipFilterForm, PriceForm
 from ..constants import status
 
 import operator
@@ -19,20 +19,32 @@ def job(id):
     chosen_job = Job.query.filter_by(id=id).first()
     if chosen_job.status == status.PENDING and chosen_job.creator_id == current_user.id:
         job_requests = JobRequestor.query.filter_by(job_id=id).all()
-        requestors = []
+        requestors = {}
         for query in job_requests:
             requestor = User.query.filter_by(id=query.requestor_id).first()
-            requestors.append(requestor)
+            requestors[requestor] = query.price
 
         return render_template('jobs/job.html', job=chosen_job, requestors=requestors)
 
     elif chosen_job.status == status.PENDING:
-        requested = False
+        price_form = PriceForm()
+
+        if price_form.validate_on_submit():
+            job_request = JobRequestor(requestor_id=current_user.id,
+                                       job_id=id,
+                                       price=price_form.price.data)
+            db.session.add(job_request)
+            db.session.commit()
+            flash('Request has been sent!', category='success')
+            return render_template('jobs/job.html', job=chosen_job)
+
         job_request = JobRequestor.query.filter_by(job_id=id, requestor_id=current_user.id).first()
         if job_request is not None:
-            requested = True
+            return render_template('jobs/job.html', job=chosen_job)
 
-        return render_template('jobs/job.html', job=chosen_job, requested=requested)
+        price_form.price.data = chosen_job.price
+
+        return render_template('jobs/job.html', job=chosen_job, form=price_form)
 
     elif chosen_job.status == status.ACCEPTED:
         acceptor = User.query.filter_by(id=chosen_job.accepted_id).first()
@@ -54,6 +66,7 @@ def create():
         if geocode_result:
             job = Job(name=form.name.data,
                       description=form.description.data,
+                      price=form.price.data,
                       status=status.PENDING,
                       location=form.street_name.data,
                       longitude=round(geocode_result[0]['geometry']['location']['lng'], 6),
@@ -157,12 +170,12 @@ def my_requests():
                (Job.status == status.CREATOR_VER) |
                (Job.status == status.WORKER_VER)).all()
 
-    requested_jobs = []
+    requested_jobs = {}
     requested_ids = JobRequestor.query.filter_by(requestor_id=current_user.id).all()
     for job_id in requested_ids:
         requested_job = Job.query.filter_by(id=job_id.job_id, status=status.PENDING).first()
         if requested_job is not None:
-            requested_jobs.append(requested_job)
+            requested_jobs[requested_job] = job_id.price
 
     return render_template('jobs/my_requests.html', accepted_jobs=accepted_jobs, requested_jobs=requested_jobs)
 
@@ -206,9 +219,12 @@ def accept_request(job_id, requestor_id):
 
 @jobs.route('/request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
 @login_required
-def request(job_id, requestor_id):
+def quick_request(job_id, requestor_id):
     if current_user.id == requestor_id:
-        job_request = JobRequestor(requestor_id=requestor_id, job_id=job_id)
+        job = Job.query.filter_by(id=job_id).first()
+        job_request = JobRequestor(requestor_id=requestor_id,
+                                   job_id=job_id,
+                                   price=job.price)
         db.session.add(job_request)
         db.session.commit()
         return redirect(url_for('jobs.browse'))
@@ -216,13 +232,13 @@ def request(job_id, requestor_id):
     return redirect(url_for('jobs.browse'))
 
 
-@jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
-@login_required
-def accept(job_id, requestor_id):
-    accepting_job = Job.query.filter_by(job_id=job_id).first()
-    accepting_job.accepted_id = requestor_id
-    db.session.commit()
-    return redirect(url_for('jobs.my_jobs'))
+# @jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
+# @login_required
+# def accept(job_id, requestor_id):
+#     accepting_job = Job.query.filter_by(job_id=job_id).first()
+#     accepting_job.accepted_id = requestor_id
+#     db.session.commit()
+#     return redirect(url_for('jobs.my_jobs'))
 
 
 @jobs.route('/review/<int:id>', methods=['GET', 'POST'])

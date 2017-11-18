@@ -22,16 +22,14 @@
             Name: {{ job.name }} <br>
             Date Created: {{ job.date_created }} <br>
             Description: {{ job.description }} <br>
+            {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+            Price: {{ "$%.2f"|format(job.price) }} <br>
+            {% endif %}
             Street Name: {{ job.location }} <br>
             Zip Code: {{ job.zipcode }} <br>
             Status: {{ job.status }} <br>
-            {% if job.status == 'Pending' and current_user.id != job.creator_id and not requested %}
-            <a href="{{ url_for('jobs.request', job_id=job.id, requestor_id=current_user.id) }}"
-               class="btn btn-lg btn-outline"
-               style="background-color: #45ad50; color: white;">
-                <i class="fa fa-check"></i>
-                Request
-            </a>
+            {% if job.status == 'Pending' and form is defined %}
+            {{ wtf.quick_form(form) }}
             {% endif %}
             {% if job.status == 'Accepted' %}
             Accepted by: <a href="{{ url_for('profile.view_profile', user_id=acceptor.id) }}">
@@ -55,6 +53,7 @@
         <hr>
         <div class="row" style="display: inline-block; margin: 1%;">
             <a href="{{ url_for('profile.view_profile', user_id=requestor.id) }}">{{ requestor.first_name }} {{ requestor.last_name }}</a><br>
+            Asking Price: {{ "$%.2f"|format(requestors[requestor]) }} <br>
             <a href="{{ url_for('jobs.accept_request', job_id=job.id, requestor_id=requestor.id) }}" class="btn btn-lg btn-outline"
                style="background-color: #0300b0; color: white;">
                 <i class="fa fa-street-view"></i>

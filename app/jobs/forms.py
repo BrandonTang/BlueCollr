@@ -1,7 +1,8 @@
 from flask import current_app
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, SubmitField, IntegerField
+from wtforms import StringField, SubmitField, IntegerField, DecimalField
 from wtforms.validators import DataRequired, Length, ValidationError
+
 
 class Len(object):
     def __init__(self, num=5, message=None):
@@ -14,11 +15,13 @@ class Len(object):
         if len(str(field.data)) != self.num:
             raise ValidationError(self.message)
 
+
 class CreateJobForm(Form):
     name = StringField('Job Name', validators=[DataRequired(), Length(1, 64)])
     description = StringField('Description', validators=[DataRequired(), Length(1, 500)])
     street_name = StringField('Street Name', validators=[DataRequired(), Length(1, 64)])
     zip_code = IntegerField('Zip Code', validators=[DataRequired(message="Please Enter a Zip Code"), Len(5)])
+    price = DecimalField('Price', places=2, validators=[DataRequired(message="Please specify a price you are requesting")])
     submit = SubmitField('Create Job')
 
 
@@ -27,6 +30,12 @@ class ReviewJobForm(Form):
     review = StringField('Review', validators=[DataRequired(), Length(1, 500)])
     submit = SubmitField('Submit Review')
 
+
 class ZipFilterForm(Form):
     zip_code = IntegerField('Zip Code:', validators=[DataRequired(message="Please Enter a Zip Code"), Len(5)])
     submit = SubmitField('Filter')
+
+
+class PriceForm(Form):
+    price = DecimalField('My Price:', places=2, validators=[DataRequired(message="Please specify a price you are charging")])
+    submit = SubmitField('Request')

@@ -44,6 +44,12 @@ def fixdb():
     jobs = Job.query.all()
     for job in jobs:
         job.status = status.PENDING
+        job.price = 3.50
+
+    job_requestors = JobRequestor.query.all()
+    for job_requestor in job_requestors:
+        job_requestor.price = 3.48
+
     db.session.commit()
 
 
