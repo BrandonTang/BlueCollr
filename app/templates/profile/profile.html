@@ -12,7 +12,7 @@ Profile
         <!--Display profile info-->
         <h2 class="text-center">Profile</h2>
         <hr>
-        <img class="img-circle" src="/static/img/default_pic.png" style="width:25vh;height:25vh"><br>
+        <img class="img-circle" src="{{ pic_path }}" style="width:25vh;height:25vh"><br>
         <style>.img-circle {border-radius: 50%; }</style>
         <div class="row" style="display: inline-block; margin: 1%;">
             Name: {{ user.first_name }} {{ user.last_name }} <br>
