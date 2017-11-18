@@ -1,6 +1,6 @@
 from flask import current_app
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, SubmitField, IntegerField, DecimalField
+from wtforms import StringField, SubmitField, IntegerField, DecimalField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
 
 
@@ -26,7 +26,7 @@ class CreateJobForm(Form):
 
 
 class ReviewJobForm(Form):
-    rating = IntegerField('Rating (1-5)', validators=[DataRequired(), Length(1, 1)])
+    rating = SelectField('Rating (1-5)', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
     review = StringField('Review', validators=[DataRequired(), Length(1, 500)])
     submit = SubmitField('Submit Review')
 

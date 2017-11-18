@@ -193,9 +193,10 @@ def my_jobs():
 
     accepted_ids = {}
     for job in job_list:
-        if job.status == status.ACCEPTED:
+        if job.status != status.PENDING:
             acceptor = User.query.filter_by(id=job.accepted_id).first()
             accepted_ids[acceptor.id] = acceptor
+
 
     print(accepted_ids)
     return render_template('jobs/my_jobs.html', jobs=jobs, accepted=accepted_ids)
@@ -241,21 +242,19 @@ def quick_request(job_id, requestor_id):
 #     return redirect(url_for('jobs.my_jobs'))
 
 
-@jobs.route('/review/<int:id>', methods=['GET', 'POST'])
+@jobs.route('/review/<int:job_id>', methods=['GET', 'POST'])
 @login_required
-def review(id):
-    current_job = Job.query.filter_by(id=id).all()
-    form = ReviewJobForm()
-    return render_template('jobs/review.html', job=current_job, form=form)
-
-@jobs.route('/complete/<int:job_id>', methods=['GET', 'POST'])
-@login_required
-def complete(job_id):
+def review(job_id):
     job = Job.query.filter_by(id=job_id).first()
-    if current_user.id == job.creator_id:
-        job.date_completed = datetime.datetime.now()
-        job.status = status.COMPLETED
-        db.session.commit()
+    form = ReviewJobForm()
+    if form.validate_on_submit():
+        if current_user.id == job.creator_id:
+            job.rating = int(form.rating.data)
+            job.review = form.review.data
+            job.date_completed = datetime.datetime.now()
+            job.status = status.COMPLETED
+            db.session.commit()
+            return redirect(url_for('jobs.my_jobs'))
+        flash("Please do not try to mark other peoples jobs as complete!")
         return redirect(url_for('jobs.my_jobs'))
-    flash("Please do not try to mark other peoples jobs as complete!")
-    return redirect(url_for('jobs.my_jobs'))
+    return render_template('jobs/review.html', job=job, form=form)

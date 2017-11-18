@@ -9,8 +9,9 @@ Job Review
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
         <h2 class="text-center">Job Review</h2>
-        {{ job.name }}
-        {{ job.description }}
+        Job Name: {{ job.name }} <br>
+        Job Description: {{ job.description }} <br>
+        <br>
         <div class="row" style="display: inline-block;">
             {{ wtf.quick_form(form) }}
         </div>

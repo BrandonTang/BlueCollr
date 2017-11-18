@@ -37,11 +37,11 @@
             </a><br>
             {% endif %}
             {% if job.status == 'Accepted' and job.creator_id == current_user.id %}
-            <a href="{{ url_for('jobs.complete', job_id=job.id) }}"
+            <a href="{{ url_for('jobs.review', job_id=job.id) }}"
                class="btn btn-lg btn-outline"
                style="background-color: #45ad50; color: white;">
                 <i class="fa fa-check"></i>
-                Complete
+                Review & Complete
             </a>
             {% endif %}
         <hr>
