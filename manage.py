@@ -11,6 +11,8 @@ from app.constants import status
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['GOOGLEMAPS_KEY'] = os.environ['GOOGLEMAPS_KEY']
+app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg'])
+app.config['UPLOAD_FOLDER'] = './app/static/img/userpics/'
 db = SQLAlchemy(app)
 
 GoogleMaps(app)

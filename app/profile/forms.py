@@ -2,7 +2,8 @@ from ..models import User
 
 from flask import current_app
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, ValidationError, SelectField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 
@@ -11,7 +12,8 @@ class EditForm(Form):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
     first_name = StringField("First Name")
     last_name = StringField("Last Name")
-    submit = SubmitField('Edit')
+    file = FileField("Profile Picture", validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'JPG/PNG/JPEG Images only!')])
+    submit = SubmitField('Update')
 
     # def validate_email(self, email_field):
     #     """

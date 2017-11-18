@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
     validated = db.Column(db.Boolean, default=False)
+    picture_path = db.Column(db.String(64), nullable=True)
 
     @property
     def password(self):
