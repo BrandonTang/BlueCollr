@@ -6,8 +6,8 @@ from ..constants import status
 
 import operator
 import googlemaps
-from geopy.distance import vincenty
 import datetime
+from geopy.distance import vincenty
 from flask import render_template, current_app, redirect, url_for, flash
 from flask_login import login_required, current_user
 from flask_googlemaps import Map
@@ -61,8 +61,6 @@ def create():
     if form.validate_on_submit():
         gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
         geocode_result = gmaps.geocode(form.street_name.data + ", " + str(form.zip_code.data))
-        # print round(geocode_result[0]['geometry']['location']['lat'], 6)
-        # print round(geocode_result[0]['geometry']['location']['lng'], 6)
         if geocode_result:
             job = Job(name=form.name.data,
                       description=form.description.data,
@@ -165,7 +163,7 @@ def browse():
 @jobs.route('/my_requests', methods=['GET', 'POST'])
 @login_required
 def my_requests():
-    accepted_jobs = Job.query.filter_by(accepted_id=current_user.id).\
+    accepted_jobs = Job.query.filter_by(accepted_id=current_user.id). \
         filter((Job.status == status.ACCEPTED) |
                (Job.status == status.CREATOR_VER) |
                (Job.status == status.WORKER_VER)).all()
@@ -197,8 +195,6 @@ def my_jobs():
             acceptor = User.query.filter_by(id=job.accepted_id).first()
             accepted_ids[acceptor.id] = acceptor
 
-
-    print(accepted_ids)
     return render_template('jobs/my_jobs.html', jobs=jobs, accepted=accepted_ids)
 
 
@@ -211,8 +207,8 @@ def accept_request(job_id, requestor_id):
         job.date_accepted = datetime.datetime.now()
         job.status = status.ACCEPTED
         db.session.commit()
-
         requestor = User.query.filter_by(id=requestor_id).first()
+        flash("Request for job successfully accepted!")
         return render_template('jobs/job.html', job=job, acceptor=requestor)
     flash("Please do not try to accept jobs for other people!")
     return url_for('jobs/job.html', job=job)
@@ -228,18 +224,10 @@ def quick_request(job_id, requestor_id):
                                    price=job.price)
         db.session.add(job_request)
         db.session.commit()
+        flash("Job successfully quick requested!")
         return redirect(url_for('jobs.browse'))
     flash("Please do not try to sign other people up for jobs!")
     return redirect(url_for('jobs.browse'))
-
-
-# @jobs.route('/accept/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
-# @login_required
-# def accept(job_id, requestor_id):
-#     accepting_job = Job.query.filter_by(job_id=job_id).first()
-#     accepting_job.accepted_id = requestor_id
-#     db.session.commit()
-#     return redirect(url_for('jobs.my_jobs'))
 
 
 @jobs.route('/review/<int:job_id>', methods=['GET', 'POST'])
@@ -247,14 +235,17 @@ def quick_request(job_id, requestor_id):
 def review(job_id):
     job = Job.query.filter_by(id=job_id).first()
     form = ReviewJobForm()
+    print("TRYING")
     if form.validate_on_submit():
+        print("WORKING")
         if current_user.id == job.creator_id:
             job.rating = int(form.rating.data)
             job.review = form.review.data
             job.date_completed = datetime.datetime.now()
             job.status = status.COMPLETED
             db.session.commit()
-            return redirect(url_for('jobs.my_jobs'))
+            flash("Job review sucessfully submitted!")
+            return redirect(url_for('jobs.job', id=job_id))
         flash("Please do not try to mark other peoples jobs as complete!")
         return redirect(url_for('jobs.my_jobs'))
     return render_template('jobs/review.html', job=job, form=form)

@@ -8,66 +8,69 @@ My Jobs
 {% block about %}
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
-        <h2 class="text-center">To Do</h2>
+        <h2 class="text-center">My Requests</h2>
+        <br>
+
+        <h3 class="text-center">In Progress</h3>
         {% if not accepted_jobs %}
-        <hr>
-        <div class="row" style="display: inline-block; margin: 1%;">
-            No jobs to do...
-        </div>
-        <br><br>
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                There are currently no jobs in progress. Keep on requesting!
+            </div>
+            <br>
         {% else %}
-        {% for job in accepted_jobs %}
-        <hr>
-        <div class="row" style="display: inline-block; margin: 1%;">
-            Name: {{ job.name }} <br>
-            Date Created: {{ job.date_created }} <br>
-            Description: {{ job.description }} <br>
-            {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
-            Price: {{ "$%.2f"|format(job.price) }} <br>
-            {% endif %}
-            Street Name: {{ job.location }} <br>
-            Zip Code: {{ job.zipcode }} <br>
-            Status: {{ job.status }} <br>
-            <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
-               style="background-color: #0300b0; color: white;">
-                <i class="fa fa-street-view"></i>
-                View
-            </a>
-        </div>
-        {% endfor %}
+            {% for job in accepted_jobs %}
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                <h3>{{ job.name }}</h3>
+                Date Created: {{ job.date_created }} <br>
+                Description: {{ job.description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+                Price: {{ "$%.2f"|format(job.price) }} <br>
+                {% endif %}
+                Street Name: {{ job.location }} <br>
+                Zip Code: {{ job.zipcode }} <br>
+                Status: {{ job.status }} <br>
+                <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+                   style="background-color: #0300b0; color: white;">
+                    <i class="fa fa-globe"></i>
+                    View
+                </a>
+            </div>
+            {% endfor %}
         {% endif %}
 
-        <h2 class="text-center">Requested Jobs</h2>
+        <h3 class="text-center" style="margin-top: 5%;">Requested</h3>
         {% if not requested_jobs %}
-        <hr>
-        <div class="row" style="display: inline-block; margin: 1%;">
-            No jobs requested...
-        </div>
-        <br><br>
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                No jobs have been requested. Click 'Browse' on the menu at the top to find a job!
+            </div>
+            <br>
         {% else %}
-        {% for job in requested_jobs %}
-        <hr>
-        <div class="row" style="display: inline-block; margin: 1%;">
-            Name: {{ job.name }} <br>
-            Date Created: {{ job.date_created }} <br>
-            Description: {{ job.description }} <br>
-            {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
-            Price: {{ "$%.2f"|format(job.price) }} <br>
-            {% endif %}
-            My Price: {{ "$%.2f"|format(requested_jobs[job]) }} <br>
-            Street Name: {{ job.location }} <br>
-            Zip Code: {{ job.zipcode }} <br>
-            Status: {{ job.status }} <br>
-            <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
-               style="background-color: #0300b0; color: white;">
-                <i class="fa fa-street-view"></i>
-                View
-            </a>
-        </div>
-        {% endfor %}
+            {% for job in requested_jobs %}
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                <h3>{{ job.name }}</h3>
+                Date Created: {{ job.date_created }} <br>
+                Description: {{ job.description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+                Price: {{ "$%.2f"|format(job.price) }} <br>
+                {% endif %}
+                My Price: {{ "$%.2f"|format(requested_jobs[job]) }} <br>
+                Street Name: {{ job.location }} <br>
+                Zip Code: {{ job.zipcode }} <br>
+                Status: {{ job.status }} <br>
+                <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+                   style="background-color: #0300b0; color: white;">
+                    <i class="fa fa-globe"></i>
+                    View
+                </a>
+            </div>
+            {% endfor %}
         {% endif %}
-    </div>
         <hr>
+
     </div>
 </section>
 {% endblock %}

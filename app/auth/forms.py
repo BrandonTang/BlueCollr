@@ -10,17 +10,17 @@ class LoginForm(Form):
     """Used for registered users to log into the system."""
     email = StringField('Email', validators=[DataRequired(), Length(1, 64)])
     password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Log In')
+    submit = SubmitField('Login')
 
 
 class RegistrationForm(Form):
     """Used to register new users into the system."""
     email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
-    first_name = StringField("First name")
-    last_name = StringField("Last name")
+    first_name = StringField("First Name")
+    last_name = StringField("Last Name")
     password = PasswordField('Password', validators=[
-        DataRequired(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+        DataRequired(), EqualTo('password2', message='Passwords must match!')])
+    password2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Register')
 
     def validate_email(self, email_field):
@@ -66,27 +66,6 @@ class RegistrationForm(Form):
 
         if not has_capital:
             raise ValidationError('Password must contain at least one capital letter')
-
-
-# class AdminRegistrationForm(Form):
-#     """Used by admins to register new users into the system."""
-#     email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
-#     first_name = StringField("First name")
-#     last_name = StringField("Last name")
-#     role = SelectField('Role', choices=roles, validators=[DataRequired()])
-#
-#     submit = SubmitField('Register')
-#
-#     def validate_email(self, email_field):
-#         """
-#         Verifies that e-mails used for registration do not already exist in the system.
-#
-#         :param email_field:
-#         :return:
-#         """
-#         if User.query.filter_by(email=email_field.data).first():
-#             raise ValidationError('An account with this email address already exists')
-#         return True
 
 
 class ChangePasswordForm(Form):

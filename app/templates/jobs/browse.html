@@ -9,26 +9,35 @@ Browse Jobs
 <section id="portfolio" style="margin-top: 5%;">
 
     <div class="container" style="text-align: center;">
-    <h5 style="color: darkblue;">
+        <h5 style="color: darkblue;">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
-                {{ message }}
+            {{ message }}
             {% endfor %}
             {% endif %}
             {% endwith %}
-    </h5>
+        </h5>
+
         <h2 class="text-center">Browse Jobs</h2>
 
+        <a href="{{ url_for('jobs.create') }}" class="btn btn-lg btn-outline"
+           style="background-color: #2c3e50; color: white;">
+            <i class="fa fa-pencil-square-o"></i>
+            Post Job
+        </a>
         {{ bluecollr_jobs_map.html }}
+        <hr>
 
-        <br>
         To filter jobs by distance, enter a zip code below.
-        {{ wtf.quick_form(form) }}
+        <div style="width: 20%; margin: 0 auto;">
+            {{ wtf.quick_form(form) }}
+        </div>
+
         {% for job in other %}
         <hr>
         <div class="row" style="display: inline-block; margin: 1%;">
-            Name: {{ job.name }} <br>
+            <h3>{{ job.name }}</h3>
             Date Created: {{ job.date_created }} <br>
             Description: {{ job.description }} <br>
             {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
@@ -39,7 +48,7 @@ Browse Jobs
             Status: {{ job.status }} <br>
             <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
                style="background-color: #0300b0; color: white;">
-                <i class="fa fa-street-view"></i>
+                <i class="fa fa-globe"></i>
                 View
             </a>
 
@@ -47,7 +56,7 @@ Browse Jobs
             <a href="{{ url_for('jobs.quick_request', job_id=job.id, requestor_id=current_user.id) }}"
                class="btn btn-lg btn-outline"
                style="background-color: #45ad50; color: white;">
-                <i class="fa fa-check"></i>
+                <i class="fa fa-bolt"></i>
                 Quick Request
             </a>
             {% endif %}
@@ -60,7 +69,8 @@ Browse Jobs
             Name: {{ job[0].name }} <br>
             Date Created: {{ job[0].date_created }} <br>
             Description: {{ job[0].description }} <br>
-            {% if job[0].status == 'Pending' or current_user.id == job[0].creator_id or current_user.id == job[0].accepted_id %}
+            {% if job[0].status == 'Pending' or current_user.id == job[0].creator_id or current_user.id ==
+            job[0].accepted_id %}
             Price: {{ "$%.2f"|format(job[0].price) }} <br>
             {% endif %}
             Street Name: {{ job[0].location }} <br>
@@ -69,7 +79,7 @@ Browse Jobs
             Distance: {{ job[1] }} miles <br>
             <a href="{{ url_for('jobs.job', id=job[0].id) }}" class="btn btn-lg btn-outline"
                style="background-color: #0300b0; color: white;">
-                <i class="fa fa-street-view"></i>
+                <i class="fa fa-globe"></i>
                 View
             </a>
 
@@ -77,20 +87,14 @@ Browse Jobs
             <a href="{{ url_for('jobs.quick_request', job_id=job[0].id, requestor_id=current_user.id) }}"
                class="btn btn-lg btn-outline"
                style="background-color: #45ad50; color: white;">
-                <i class="fa fa-check"></i>
-                Request
+                <i class="fa fa-bolt"></i>
+                Quick Request
             </a>
             {% endif %}
         </div>
         {% endfor %}
         <hr>
 
-        <br>
-        <a href="{{ url_for('jobs.create') }}" class="btn btn-lg btn-outline"
-           style="background-color: #2c3e50; color: white;">
-            <i class="fa fa-user"></i>
-            Post Job
-        </a>
     </div>
 </section>
 {% endblock %}

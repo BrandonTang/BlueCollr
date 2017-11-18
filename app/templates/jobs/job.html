@@ -8,55 +8,67 @@
 {% block about %}
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
+
         <h5 style="color: darkblue;">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
-                {{ message }}
+            {{ message }}
             {% endfor %}
             {% endif %}
             {% endwith %}
         </h5>
+
         <h2 class="text-center">{{ job.name }}</h2>
         <hr>
-            Name: {{ job.name }} <br>
-            Date Created: {{ job.date_created }} <br>
-            Description: {{ job.description }} <br>
-            {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
-            Price: {{ "$%.2f"|format(job.price) }} <br>
-            {% endif %}
-            Street Name: {{ job.location }} <br>
-            Zip Code: {{ job.zipcode }} <br>
-            Status: {{ job.status }} <br>
-            {% if job.status == 'Pending' and form is defined %}
+        Date Created: {{ job.date_created }} <br>
+        Description: {{ job.description }} <br>
+        {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+        Price: {{ "$%.2f"|format(job.price) }} <br>
+        {% endif %}
+        Street Name: {{ job.location }} <br>
+        Zip Code: {{ job.zipcode }} <br>
+        Status: {{ job.status }} <br>
+
+        {% if job.status == 'Pending' and form is defined %}
+        <div style="width: 20%; margin: 0 auto;">
             {{ wtf.quick_form(form) }}
-            {% endif %}
-            {% if job.status != 'Pending' %}
-            Accepted by: <a href="{{ url_for('profile.view_profile', user_id=acceptor.id) }}">
+        </div>
+        {% endif %}
+
+        {% if job.status != 'Pending' %}
+        Accepted by:
+        <a href="{{ url_for('profile.view_profile', user_id=acceptor.id) }}">
             {{ acceptor.first_name }} {{ acceptor.last_name }}
-            </a><br>
-            {% endif %}
-            {% if job.status == 'Accepted' and job.creator_id == current_user.id %}
-            <a href="{{ url_for('jobs.review', job_id=job.id) }}"
-               class="btn btn-lg btn-outline"
-               style="background-color: #45ad50; color: white;">
-                <i class="fa fa-check"></i>
-                Review & Complete
-            </a>
-            {% endif %}
+        </a><br>
+        {% endif %}
+
+        {% if job.status == 'Accepted' and job.creator_id == current_user.id %}
+        <a href="{{ url_for('jobs.review', job_id=job.id) }}" class="btn btn-lg btn-outline"
+           style="background-color: #45ad50; color: white;">
+            <i class="fa fa-check"></i>
+            Review & Complete
+        </a>
+        {% endif %}
         <hr>
+
     </div>
+
     {% if job.status == 'Pending' and job.creator_id == current_user.id %}
     <div class="container" style="text-align: center;">
         <h2 class="text-center">Requests</h2>
+
         {% for requestor in requestors %}
         <hr>
         <div class="row" style="display: inline-block; margin: 1%;">
-            <a href="{{ url_for('profile.view_profile', user_id=requestor.id) }}">{{ requestor.first_name }} {{ requestor.last_name }}</a><br>
-            Asking Price: {{ "$%.2f"|format(requestors[requestor]) }} <br>
-            <a href="{{ url_for('jobs.accept_request', job_id=job.id, requestor_id=requestor.id) }}" class="btn btn-lg btn-outline"
-               style="background-color: #0300b0; color: white;">
-                <i class="fa fa-street-view"></i>
+            <a href="{{ url_for('profile.view_profile', user_id=requestor.id) }}">
+                {{ requestor.first_name }} {{requestor.last_name }}</a>
+            <br>
+            Asking Price: {{ "$%.2f"|format(requestors[requestor]) }}
+            <br>
+            <a href="{{ url_for('jobs.accept_request', job_id=job.id, requestor_id=requestor.id) }}"
+               class="btn btn-lg btn-outline" style="background-color: #45ad50; color: white;">
+                <i class="fa fa-money"></i>
                 Accept Request
             </a>
         </div>
@@ -64,5 +76,6 @@
         <hr>
     </div>
     {% endif %}
+
 </section>
 {% endblock %}

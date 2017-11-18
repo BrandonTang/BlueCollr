@@ -11,6 +11,15 @@ Profile
 
         <!--Display profile info-->
         <h2 class="text-center">Profile</h2>
+        <h5 style="color: darkblue;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </h5>
         <hr>
         <img class="img-circle" src="/static/img/default_pic.png" style="width:25vh;height:25vh"><br>
         <style>.img-circle {border-radius: 50%; }</style>
