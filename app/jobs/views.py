@@ -294,10 +294,132 @@ def my_jobs():
         acceptors.append(acceptor)
     completed_jobs = dict(zip(job_list, acceptors))
 
+    form = ZipFilterForm()
+    markers_list = [{
+        'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        'lat': 40.6939904,
+        'lng': -73.98656399999999,
+        'infobox': "BlueCollr HQ"
+    }]
+
+    for job in accepted_jobs:
+        name = job.name
+        description = job.description
+        price = job.price
+        link = "/jobs/job/" + str(job.id)
+        latitude = job.latitude
+        longitude = job.longitude
+        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+                             'lat': latitude,
+                             'lng': longitude,
+                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                                         "<br/>Description: " + description +
+                                         "<br/>Job Status: " + job.status +
+                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                             })
+
+    for job in pending_jobs:
+        name = job.name
+        description = job.description
+        price = job.price
+        link = "/jobs/job/" + str(job.id)
+        latitude = job.latitude
+        longitude = job.longitude
+        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+                             'lat': latitude,
+                             'lng': longitude,
+                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                                         "<br/>Description: " + description +
+                                         "<br/>Job Status: " + job.status +
+                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                             })
+
+    for job in completed_jobs:
+        name = job.name
+        description = job.description
+        price = job.price
+        link = "/jobs/job/" + str(job.id)
+        latitude = job.latitude
+        longitude = job.longitude
+        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+                             'lat': latitude,
+                             'lng': longitude,
+                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                                         "<br/>Description: " + description +
+                                         "<br/>Job Status: " + job.status +
+                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                             })
+
+    bluecollr_jobs_map = Map(
+        identifier="bluecollr_map",
+        zoom=15,
+        lat=40.6939904,
+        lng=-73.98656399999999,
+        markers=markers_list,
+        scroll_wheel=False,
+        style="height:50vh;width:100%;margin:3% 0%;"
+    )
+    if form.validate_on_submit():
+        gmaps = googlemaps.Client(key=current_app.config['MAPS_API'])
+        geocode_result = gmaps.geocode("Zip Code:" + str(form.zip_code.data))
+        if geocode_result:
+            location = (round(geocode_result[0]['geometry']['location']['lat'], 6),
+                        round(geocode_result[0]['geometry']['location']['lng'], 6))
+            markers_list.append({
+                'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                'lat': round(geocode_result[0]['geometry']['location']['lat'], 6),
+                'lng': round(geocode_result[0]['geometry']['location']['lng'], 6),
+                'infobox': "Current Location"
+            })
+            bluecollr_jobs_map = Map(
+                identifier="bluecollr_map",
+                zoom=15,
+                lat=geocode_result[0]['geometry']['location']['lat'],
+                lng=geocode_result[0]['geometry']['location']['lng'],
+                markers=markers_list,
+                scroll_wheel=False,
+                style="height:50vh;width:100%;margin:3% 0%;"
+            )
+            distances_1 = {}
+            for job in accepted_jobs:
+                job_location = (job.latitude, job.longitude)
+                distances_1[job] = float("{0:.1f}".format(vincenty(location, job_location).miles))
+            accepted_jobs_by_distance = sorted(distances_1.items(), key=operator.itemgetter(1))
+
+            distances_2 = {}
+            for job in pending_jobs:
+                job_location = (job.latitude, job.longitude)
+                distances_2[job] = float("{0:.1f}".format(vincenty(location, job_location).miles))
+            pending_jobs_by_distance = sorted(distances_2.items(), key=operator.itemgetter(1))
+
+            distances_3 = {}
+            for job in completed_jobs:
+                job_location = (job.latitude, job.longitude)
+                distances_3[job] = float("{0:.1f}".format(vincenty(location, job_location).miles))
+            completed_jobs_by_distance = sorted(distances_3.items(), key=operator.itemgetter(1))
+
+            return render_template('jobs/my_jobs.html',
+                                   form=form,
+                                   bluecollr_jobs_map=bluecollr_jobs_map,
+                                   accepted_sorted=accepted_jobs_by_distance,
+                                   pending_sorted=pending_jobs_by_distance,
+                                   completed_sorted=completed_jobs_by_distance)
+
+        flash('Invalid Zip Code! Please enter a valid Zip Code.', category='success')
+        return render_template('jobs/my_jobs.html',
+                               form=form,
+                               bluecollr_jobs_map=bluecollr_jobs_map,
+                               accepted_jobs=accepted_jobs,
+                               pending_jobs=pending_jobs,
+                               completed_jobs=completed_jobs)
+
     return render_template('jobs/my_jobs.html',
+                           form=form,
+                           bluecollr_jobs_map=bluecollr_jobs_map,
                            accepted_jobs=accepted_jobs,
                            pending_jobs=pending_jobs,
                            completed_jobs=completed_jobs)
+
 
 
 @jobs.route('/accept_request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
