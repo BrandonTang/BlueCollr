@@ -16,7 +16,16 @@ import datetime
 def view_profile(user_id):
     user = User.query.filter_by(id=user_id).first()
     jobs_completed = Job.query.filter_by(accepted_id=user_id, status=status.COMPLETED).all()
-    return render_template('profile/profile.html', user=user, jobs_completed=jobs_completed)
+
+    # Find avg rating of completed jobs
+    total = 0
+    avg_rating = 1
+    for job in jobs_completed:
+        total += job.rating
+    if len(jobs_completed) >= 1:
+        avg_rating = total / len(jobs_completed)
+
+    return render_template('profile/profile.html', user=user, jobs_completed=jobs_completed, avg_rating=avg_rating)
 
 
 def allowed_file(filename):

@@ -50,6 +50,11 @@ Profile
             </div>
             <br>
         {% else %}
+            <hr>
+                <div class="row" style="display: inline-block; margin: 1%;">
+                    Your Average Rating: {{ avg_rating }}
+                </div>
+            <br>
             {% for job in jobs_completed %}
                 <hr>
                 Job Name: {{ job.name }} <br>
