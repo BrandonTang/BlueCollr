@@ -100,22 +100,12 @@ def browse():
         'lng': -73.98656399999999,
         'infobox': "BlueCollr HQ"
     }]
-    for job in requested_jobs:
-        name = job.name
-        description = job.description
-        latitude = job.latitude
-        longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
-                             'lat': latitude,
-                             'lng': longitude,
-                             'infobox': ("Name: " + name + "<br/>Description: " + description)
-                             })
     for job in other_jobs:
         name = job.name
         description = job.description
         latitude = job.latitude
         longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
                              'lat': latitude,
                              'lng': longitude,
                              'infobox': ("Name: " + name + "<br/>Description: " + description)
@@ -136,7 +126,7 @@ def browse():
             location = (round(geocode_result[0]['geometry']['location']['lat'], 6),
                         round(geocode_result[0]['geometry']['location']['lng'], 6))
             markers_list.append({
-                'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
                 'lat': round(geocode_result[0]['geometry']['location']['lat'], 6),
                 'lng': round(geocode_result[0]['geometry']['location']['lng'], 6),
                 'infobox': "Current Location"

@@ -5,9 +5,10 @@ from ..profile.forms import EditForm
 
 
 from flask import render_template, current_app, redirect, request, url_for, flash, session
-from flask_login import login_required, login_user, logout_user, current_user
+from flask_login import login_required, current_user
 from ..constants import status
 import os
+import datetime
 
 
 @profile.route('/<user_id>', methods=['GET', 'POST'])
@@ -28,37 +29,44 @@ def allowed_file(filename):
 @profile.route('/<user_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_profile(user_id):
-    form = EditForm()
-    user = User.query.filter_by(id=user_id).first()
+    if current_user.id == int(user_id):
+        form = EditForm()
+        user = User.query.filter_by(id=user_id).first()
+        if request.method == 'GET':
+            # Pre-populate form
+            form.first_name.data = user.first_name
+            form.last_name.data = user.last_name
+            form.email.data = user.email
 
-    if request.method == 'GET':
-        # Pre-populate form
-        form.first_name.data = user.first_name
-        form.last_name.data = user.last_name
-        form.email.data = user.email
+        if form.validate_on_submit():
+            # Get info from form and modify
+            if form.first_name != user.first_name:
+                current_user.first_name = form.first_name.data
+            if form.last_name != user.last_name:
+                current_user.last_name = form.last_name.data
+            if form.email != user.email:
+                current_user.email = form.email.data
+            if form.file.data is not None:
+                f = form.file.data
+                if f.mimetype == "image/png":
+                    ext = ".png"
+                elif f.mimetype == "image/jpg":
+                    ext = '.jpg'
+                elif f.mimetype == "image/jpeg":
+                    ext = '.jpeg'
+                time_now = datetime.datetime.now()
+                microseconds = time_now.microsecond
+                path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(user_id) + "_" + str(microseconds) + "_pic" + ext)
+                print path
+                f.save(path)
+                old_path = current_user.picture_path
+                os.remove('./app' + old_path)
+                current_user.picture_path = path[5:]
+            db.session.commit()
+            flash('User information successfully updated!')
+            return redirect(url_for('profile.view_profile', user_id=user.id))
 
-    if form.validate_on_submit():
-        # Get info from form and modify
-        if form.first_name != user.first_name:
-            current_user.first_name = form.first_name.data
-        if form.last_name != user.last_name:
-            current_user.last_name = form.last_name.data
-        if form.email != user.email:
-            current_user.email = form.email.data
-        if form.file.data is not None:
-            f = form.file.data
-            if f.mimetype == "image/png":
-                ext = ".png"
-            elif f.mimetype == "image/jpg":
-                ext = '.jpg'
-            elif f.mimetype == "image/jpeg":
-                ext = '.jpeg'
-            path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(user_id) + "_pic" + ext)
-            print path
-            f.save(path)
-            current_user.picture_path = path[5:]
-        db.session.commit()
+        return render_template('profile/edit.html', form=form, user=user)
 
-        flash('User information successfully updated!')
-        return redirect(url_for('profile.view_profile', user_id=user.id))
-    return render_template('profile/edit.html', form=form, user=user)
+    flash('Do not try to edit other peoples profiles!')
+    return redirect(url_for('profile.view_profile', user_id=user_id))
