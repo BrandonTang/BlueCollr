@@ -20,17 +20,8 @@ Profile
             {% endif %}
             {% endwith %}
         </h5>
-        <hr>
-        <img class="img-circle" src="{{ user.picture_path }}" style="width:25vh;height:25vh"><br>
-        <style>.img-circle {border-radius: 50%; }</style>
-        <div class="row" style="display: inline-block; margin: 1%;">
-            Name: {{ user.first_name }} {{ user.last_name }} <br>
-            Email: {{ user.email }} <br>
-        </div>
 
-        <hr>
-
-        <!--Edit Profile Button-->
+        <!--Edit profile button-->
         {% if user.id == current_user.id %}
         <a href="{{ url_for('profile.edit_profile') }}" class="btn btn-lg btn-outline"
            style="background-color: #2c3e50; color: white;">
@@ -38,33 +29,36 @@ Profile
             Edit Profile
         </a>
         {% endif %}
+        <br><br>
 
-        <hr>
+        <img class="img-circle" src="{{ user.picture_path }}" style="width:25vh;height:25vh"><br>
+        <style>.img-circle {border-radius: 50%; }</style>
+        <div class="row" style="display: inline-block; margin: 1%;">
+            Name: {{ user.first_name }} {{ user.last_name }} <br>
+            Email: {{ user.email }} <br>
+            {% if jobs_completed %}
+                Average Rating: {{ avg_rating }}/5
+            {% endif %}
+        </div>
 
         <!--Shows completed jobs-->
-        <h2 class="text-center">Completed Jobs</h2>
+        <h3 class="text-center" style="margin-top: 5%;">Completed Jobs</h3>
         {% if not jobs_completed %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
-                You have not completed any jobs. You suck.
+                There are currently no completed jobs.
             </div>
-            <br>
         {% else %}
-            <hr>
-                <div class="row" style="display: inline-block; margin: 1%;">
-                    Your Average Rating: {{ avg_rating }}
-                </div>
-            <br>
             {% for job in jobs_completed %}
                 <hr>
-                Job Name: {{ job.name }} <br>
+                <h5>{{ job.name }}</h5>
                 Description: {{ job.description }} <br>
                 Price: {{ "$%.2f"|format(job.price) }} <br>
                 Rating: {{ job.rating }} <br>
                 Review: {{ job.review }} <br>
-                <hr>
             {% endfor %}
         {% endif %}
+        <hr>
 
     </div>
 </section>
