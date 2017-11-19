@@ -3,3 +3,5 @@
 bluecollr_venv
 *.pyc
 migrations/.DS_Store
+app/static/img/userpics/*
+!app/static/img/userpics/default_pic.png

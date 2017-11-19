@@ -46,15 +46,15 @@ Profile
         {% if not jobs_completed %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
-                No completed jobs...
+                You have not completed any jobs. You suck.
             </div>
-            <br><br>
+            <br>
         {% else %}
             {% for job in jobs_completed %}
                 <hr>
                 Job Name: {{ job.name }} <br>
                 Description: {{ job.description }} <br>
-                Price: {{ job.price }} <br>
+                Price: {{ "$%.2f"|format(job.price) }} <br>
                 <!--Add review stuff later-->
                 <hr>
             {% endfor %}
