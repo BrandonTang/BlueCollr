@@ -26,51 +26,108 @@ My Jobs
             Post Job
         </a>
 
-        {% if not jobs %}
+        <h3 class="text-center" style="margin-top: 5%;">In Progress</h3>
+        {% if not accepted_jobs %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
-                No jobs have been created. Click the 'Post Job' button above to post one!
+                You have not accepted anyone for your jobs. Woo.
             </div>
             <br>
         {% else %}
-            {% for job in jobs %}
+            {% for job in accepted_jobs %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
-                <h3>{{ job.name }}</h3>
+                <h5>{{ job.name }}</h5>
                 Date Created: {{ job.date_created }} <br>
                 Description: {{ job.description }} <br>
-
                 {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
-                    Price: {{ "$%.2f"|format(job.price) }} <br>
+                Price: {{ "$%.2f"|format(job.price) }} <br>
                 {% endif %}
+                Street Name: {{ job.location }} <br>
+                Zip Code: {{ job.zipcode }} <br>
+                Status: {{ job.status }} <br>
+                Accepted by:
+                    <a href="{{ url_for('profile.view_profile', user_id=job.accepted_id) }}">
+                    {{ accepted_jobs[job].first_name }} {{ accepted_jobs[job].last_name }}
+                    </a>
+                    <br>
+                <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+                   style="background-color: #0300b0; color: white;">
+                    <i class="fa fa-globe"></i>
+                    View
+                </a>
+            </div>
+            {% endfor %}
+        {% endif %}
 
+        <h3 class="text-center" style="margin-top: 5%;">Pending</h3>
+        {% if not pending_jobs %}
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                You currently have no pending jobs. Wee.
+            </div>
+            <br>
+        {% else %}
+            {% for job in pending_jobs %}
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                <h5>{{ job.name }}</h5>
+                Date Created: {{ job.date_created }} <br>
+                Description: {{ job.description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+                Price: {{ "$%.2f"|format(job.price) }} <br>
+                {% endif %}
                 Street Name: {{ job.location }} <br>
                 Zip Code: {{ job.zipcode }} <br>
                 Status: {{ job.status }} <br>
 
-                {% if job.status == 'Pending' %}
-                    {% if jobs[job] == 1 %}
-                        {{ jobs[job] }} request
-                    {% else %}
-                        {{ jobs[job] }} requests
-                    {% endif %}
-                    <br>
+                {% if pending_jobs[job] == 1 %}
+                    {{ pending_jobs[job] }} request
+                {% else %}
+                    {{ pending_jobs[job] }} requests
                 {% endif %}
-
-                {% if job.status != 'Pending' %}
-                    Accepted by:
-                    <a href="{{ url_for('profile.view_profile', user_id=job.accepted_id) }}">
-                    {{ accepted[job.accepted_id].first_name }} {{ accepted[job.accepted_id].last_name }}
-                    </a>
-                    <br>
-                {% endif %}
+                <br>
 
                 <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
                    style="background-color: #0300b0; color: white;">
                     <i class="fa fa-globe"></i>
                     View
                 </a>
+            </div>
+            {% endfor %}
+        {% endif %}
 
+        <h3 class="text-center" style="margin-top: 5%;">Completed</h3>
+        {% if not completed_jobs %}
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                None of your jobs have been completed. Find better workers.
+            </div>
+            <br>
+        {% else %}
+            {% for job in completed_jobs %}
+            <hr>
+            <div class="row" style="display: inline-block; margin: 1%;">
+                <h5>{{ job.name }}</h5>
+                Date Created: {{ job.date_created }} <br>
+                Date Completed: {{ job.date_completed }} <br>
+                Description: {{ job.description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
+                Price: {{ "$%.2f"|format(job.price) }} <br>
+                {% endif %}
+                Street Name: {{ job.location }} <br>
+                Zip Code: {{ job.zipcode }} <br>
+                Status: {{ job.status }} <br>
+                Accepted by:
+                    <a href="{{ url_for('profile.view_profile', user_id=job.accepted_id) }}">
+                    {{ completed_jobs[job].first_name }} {{ completed_jobs[job].last_name }}
+                    </a>
+                    <br>
+                <a href="{{ url_for('jobs.job', id=job.id) }}" class="btn btn-lg btn-outline"
+                   style="background-color: #0300b0; color: white;">
+                    <i class="fa fa-globe"></i>
+                    View
+                </a>
             </div>
             {% endfor %}
         {% endif %}

@@ -22,7 +22,7 @@ My Requests
             {% for job in accepted_jobs %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
-                <h3>{{ job.name }}</h3>
+                <h5>{{ job.name }}</h5>
                 Date Created: {{ job.date_created }} <br>
                 Description: {{ job.description }} <br>
                 {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
@@ -51,7 +51,7 @@ My Requests
             {% for job in requested_jobs %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
-                <h3>{{ job.name }}</h3>
+                <h5>{{ job.name }}</h5>
                 Date Created: {{ job.date_created }} <br>
                 Description: {{ job.description }} <br>
                 {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}

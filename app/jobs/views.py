@@ -181,21 +181,33 @@ def my_requests():
 @jobs.route('/my_jobs', methods=['GET', 'POST'])
 @login_required
 def my_jobs():
-    job_list = Job.query.filter_by(creator_id=current_user.id).all()
+    job_list = Job.query.filter_by(creator_id=current_user.id, status=status.ACCEPTED).all()
+
+    acceptors = []
+    for job in job_list:
+        acceptor = User.query.filter_by(id=job.accepted_id).first()
+        acceptors.append(acceptor)
+    accepted_jobs = dict(zip(job_list, acceptors))
+
+    job_list = Job.query.filter_by(creator_id=current_user.id, status=status.PENDING).all()
     request_counts = []
     for job in job_list:
         request_count = JobRequestor.query.filter_by(job_id=job.id).all()
         request_counts.append(len(request_count))
+    pending_jobs = dict(zip(job_list, request_counts))
 
-    jobs = dict(zip(job_list, request_counts))
+    job_list = Job.query.filter_by(creator_id=current_user.id, status=status.COMPLETED).all()
 
-    accepted_ids = {}
+    acceptors = []
     for job in job_list:
-        if job.status != status.PENDING:
-            acceptor = User.query.filter_by(id=job.accepted_id).first()
-            accepted_ids[acceptor.id] = acceptor
+        acceptor = User.query.filter_by(id=job.accepted_id).first()
+        acceptors.append(acceptor)
+    completed_jobs = dict(zip(job_list, acceptors))
 
-    return render_template('jobs/my_jobs.html', jobs=jobs, accepted=accepted_ids)
+    return render_template('jobs/my_jobs.html',
+                           accepted_jobs=accepted_jobs,
+                           pending_jobs=pending_jobs,
+                           completed_jobs=completed_jobs)
 
 
 @jobs.route('/accept_request/<int:job_id>/<int:requestor_id>', methods=['GET', 'POST'])
