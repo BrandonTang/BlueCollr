@@ -14,16 +14,17 @@ import os
 @login_required
 def view_profile(user_id):
     user = User.query.filter_by(id=user_id).first()
-    jobs_completed = Job.query.filter_by(accepted_id=user_id, status=status.COMPLETED)
+    jobs_completed = Job.query.filter_by(accepted_id=user_id, status=status.COMPLETED).all()
     if user.picture_path is None:
         pic_path = "/static/img/userpics/default_pic.png"
     else:
         pic_path = user.picture_path
-        print pic_path
     return render_template('profile/profile.html', pic_path=pic_path, user=user, jobs_completed=jobs_completed)
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+
 
 @profile.route('/<user_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -54,7 +55,6 @@ def edit_profile(user_id):
             elif f.mimetype == "image/jpeg":
                 ext = '.jpeg'
             path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(user_id) + "_pic" + ext)
-            print path
             f.save(path)
             current_user.picture_path = path[5:]
         db.session.commit()
