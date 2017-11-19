@@ -17,7 +17,7 @@ My Requests
         <div style="width: 20%; margin: 0 auto;">
             {{ wtf.quick_form(form) }}
         </div>
-
+        <hr>
         <h3 class="text-center">In Progress</h3>
         {% if not accepted_jobs and not accepted_sorted %}
             <hr>
@@ -32,7 +32,9 @@ My Requests
                 <h5>{{ job.name }}</h5>
                 Date Created: {{ job.date_created }} <br>
                 Description: {{ job.description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job.price) }} <br>
+                {% endif %}
                 Street Name: {{ job.location }} <br>
                 Zip Code: {{ job.zipcode }} <br>
                 Status: {{ job.status }} <br>
@@ -50,7 +52,9 @@ My Requests
                 <h5>{{ job[0].name }}</h5>
                 Date Created: {{ job[0].date_created }} <br>
                 Description: {{ job[0].description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job[0].price) }} <br>
+                {% endif %}
                 Street Name: {{ job[0].location }} <br>
                 Zip Code: {{ job[0].zipcode }} <br>
                 Status: {{ job[0].status }} <br>
@@ -65,8 +69,8 @@ My Requests
 
         {% endif %}
 
-        <h3 class="text-center">Requested</h3>
-        {% if not requested_jobs and not requested_sorted %}
+        <h3 class="text-center" style="margin-top: 5%;">Requested</h3>
+        {% if not requested_jobs %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 No jobs have been requested. Click 'Browse' on the menu at the top to find a job!
@@ -79,7 +83,10 @@ My Requests
                 <h5>{{ job.name }}</h5>
                 Date Created: {{ job.date_created }} <br>
                 Description: {{ job.description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job.price) }} <br>
+                {% endif %}
+                My Price: {{ "$%.2f"|format(requested_jobs[job]) }} <br>
                 Street Name: {{ job.location }} <br>
                 Zip Code: {{ job.zipcode }} <br>
                 Status: {{ job.status }} <br>
@@ -97,7 +104,9 @@ My Requests
                 <h5>{{ job[0].name }}</h5>
                 Date Created: {{ job[0].date_created }} <br>
                 Description: {{ job[0].description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job[0].price) }} <br>
+                {% endif %}
                 Street Name: {{ job[0].location }} <br>
                 Zip Code: {{ job[0].zipcode }} <br>
                 Status: {{ job[0].status }} <br>
