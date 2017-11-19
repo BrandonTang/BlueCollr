@@ -55,7 +55,8 @@ Profile
                 Job Name: {{ job.name }} <br>
                 Description: {{ job.description }} <br>
                 Price: {{ "$%.2f"|format(job.price) }} <br>
-                <!--Add review stuff later-->
+                Rating: {{ job.rating }} <br>
+                Review: {{ job.review }} <br>
                 <hr>
             {% endfor %}
         {% endif %}
