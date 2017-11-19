@@ -56,6 +56,10 @@
                 <li class="nav-item">
                     <a class="nav-link" style="color: white;">{{ current_user.first_name }} {{ current_user.last_name }}</a>
                 </li>
+                <li class="nav-item">
+                    <img class="img-circle" src="{{ current_user.picture_path }}"
+                         style="width:3vh;height:3vh;border-radius:50%;">
+                </li>
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>

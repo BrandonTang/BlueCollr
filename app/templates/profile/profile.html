@@ -31,8 +31,8 @@ Profile
         {% endif %}
         <br><br>
 
-        <img class="img-circle" src="{{ user.picture_path }}" style="width:25vh;height:25vh"><br>
-        <style>.img-circle {border-radius: 50%; }</style>
+        <img class="img-circle" src="{{ user.picture_path }}" style="width:25vh;height:25vh;border-radius:50%;"><br>
+
         <div class="row" style="display: inline-block; margin: 1%;">
             Name: {{ user.first_name }} {{ user.last_name }} <br>
             Email: {{ user.email }} <br>
