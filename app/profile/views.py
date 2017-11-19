@@ -2,13 +2,13 @@ from app import db
 from app.models import User, Job
 from ..profile import profile
 from ..profile.forms import EditForm
-
-
-from flask import render_template, current_app, redirect, request, url_for, flash, session
-from flask_login import login_required, current_user
 from ..constants import status
+from ..utils import allowed_file
+
 import os
 import datetime
+from flask import render_template, current_app, redirect, request, url_for, flash, session
+from flask_login import login_required, current_user
 
 
 @profile.route('/<user_id>', methods=['GET', 'POST'])
@@ -19,24 +19,20 @@ def view_profile(user_id):
 
     # Find avg rating of completed jobs
     total = 0
-    avg_rating = 1
     for job in jobs_completed:
         total += job.rating
     if len(jobs_completed) >= 1:
-        avg_rating = total / len(jobs_completed)
+        avg_rating = "{0:.2f}".format(float(total) / len(jobs_completed))
+    else:
+        avg_rating = 0
 
     return render_template('profile/profile.html', user=user, jobs_completed=jobs_completed, avg_rating=avg_rating)
-
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 
 @profile.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     form = EditForm()
-    # user = User.query.filter_by(id=user_id).first()
 
     if request.method == 'GET':
         # Pre-populate form

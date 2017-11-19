@@ -38,9 +38,6 @@
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" >{{ current_user.first_name }} {{ current_user.last_name }} -----change-----</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('jobs.browse') }}">Browse</a>
                 </li>
                 <li class="nav-item">
@@ -55,6 +52,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: white;">{{ current_user.first_name }} {{ current_user.last_name }}</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
