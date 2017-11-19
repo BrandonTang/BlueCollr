@@ -110,10 +110,10 @@ def browse():
         markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
                              'lat': latitude,
                              'lng': longitude,
-                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                             'infobox': ("Job Name: " + name +
                                          "<br/>Description: " + description +
                                          "<br/>Price: $" + "{0:.2f}".format(price) +
-                                         "<br/>")
+                                         "<br/><a href = '" + link + "' > View </a> ")
                              })
     bluecollr_jobs_map = Map(
         identifier="bluecollr_map",
@@ -190,10 +190,11 @@ def my_requests():
         markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
                              'lat': latitude,
                              'lng': longitude,
-                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                             'infobox': ("Job Name: " + name +
                                          "<br/>Description: " + description +
                                          "<br/>Job Status: " + job.status +
-                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                                         "<br/>Price: $" + "{0:.2f}".format(price) +
+                                         "<br/><a href = '" + link + "' > View </a> ")
                              })
 
     for job in requested_jobs:
@@ -206,10 +207,11 @@ def my_requests():
         markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
                              'lat': latitude,
                              'lng': longitude,
-                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                             'infobox': ("Job Name: " + name +
                                          "<br/>Description: " + description +
                                          "<br/>Job Status: " + job.status +
-                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                                         "<br/>Price: $" + "{0:.2f}".format(price) +
+                                         "<br/><a href = '" + link + "' > View </a> ")
                              })
 
     bluecollr_jobs_map = Map(
@@ -312,10 +314,11 @@ def my_jobs():
         markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
                              'lat': latitude,
                              'lng': longitude,
-                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                             'infobox': ("Job Name: " + name +
                                          "<br/>Description: " + description +
                                          "<br/>Job Status: " + job.status +
-                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                                         "<br/>Price: $" + "{0:.2f}".format(price) +
+                                         "<br/><a href = '" + link + "' > View </a> ")
                              })
 
     for job in pending_jobs:
@@ -328,10 +331,11 @@ def my_jobs():
         markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
                              'lat': latitude,
                              'lng': longitude,
-                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                             'infobox': ("Job Name: " + name +
                                          "<br/>Description: " + description +
                                          "<br/>Job Status: " + job.status +
-                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                                         "<br/>Price: $" + "{0:.2f}".format(price) +
+                                         "<br/><a href = '" + link + "' > View </a> ")
                              })
 
     for job in completed_jobs:
@@ -344,10 +348,11 @@ def my_jobs():
         markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
                              'lat': latitude,
                              'lng': longitude,
-                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                             'infobox': ("Job Name: " + name +
                                          "<br/>Description: " + description +
                                          "<br/>Job Status: " + job.status +
-                                         "<br/>Price: $" + "{0:.2f}".format(price))
+                                         "<br/>Price: $" + "{0:.2f}".format(price) +
+                                         "<br/><a href = '" + link + "' > View </a> ")
                              })
 
     bluecollr_jobs_map = Map(
@@ -459,9 +464,7 @@ def quick_request(job_id, requestor_id):
 def review(job_id):
     job = Job.query.filter_by(id=job_id).first()
     form = ReviewJobForm()
-    print("TRYING")
     if form.validate_on_submit():
-        print("WORKING")
         if current_user.id == job.creator_id:
             job.rating = int(form.rating.data)
             job.review = form.review.data

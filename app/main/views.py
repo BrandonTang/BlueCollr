@@ -34,11 +34,11 @@ def index():
         markers_list.append({'icon': icon,
                              'lat': latitude,
                              'lng': longitude,
-                             'infobox': ("Job Name: <a href='" + link + "'>" + name + "</a>" +
+                             'infobox': ("<center>Job Name: " + name +
                                          "<br/>Description: " + description +
                                          "<br/>Job Status: " + job.status +
                                          "<br/>Price: $" + "{0:.2f}".format(price) +
-                                         "<br/>")
+                                         "<br/><a href = '" + link + "' > View </a> ")
                              })
 
     bluecollr_jobs_map = Map(
