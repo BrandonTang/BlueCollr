@@ -1,7 +1,7 @@
 {% extends "layout/base.html" %}
 
 {% block title %}
-Home
+BlueCollr
 {% endblock %}
 
 {% block header %}
@@ -17,7 +17,16 @@ Home
 </header>
 {% endblock %}
 
+
+
 {% block portfolio %}
+<section id="map">
+    <div class="container">
+        {{ bluecollr_jobs_map.html }}
+    </div>
+</section>
+
+
 <section id="portfolio">
     <div class="container">
         <h2 class="text-center">Prior Work Portfolio</h2>
@@ -82,3 +91,7 @@ Home
     </div>
 </section>
 {% endblock %}
+
+{% block scripts %}
+{{ bluecollr_jobs_map.js }}
+{% endblock %}}
