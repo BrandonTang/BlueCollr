@@ -47,6 +47,15 @@ def fixdb():
     for job in jobs:
         job.status = status.PENDING
         job.price = 3.50
+        job.review = None
+        job.rating = None
+        job.accepted_id = None
+        job.date_accepted = None
+        job.date_completed = None
+
+    users = User.query.all()
+    for user in users:
+        user.picture_path = "/static/img/userpics/default_pic.png"
 
     job_requestors = JobRequestor.query.all()
     for job_requestor in job_requestors:

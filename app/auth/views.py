@@ -31,6 +31,7 @@ def register():
                     password=form.password.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
+                    picture_path="/static/img/userpics/default_pic.png",
                     validated=True)
         db.session.add(user)
         db.session.commit()

@@ -9,11 +9,24 @@ Job Review
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
         <h2 class="text-center">Job Review</h2>
-        Job Name: {{ job.name }} <br>
-        Job Description: {{ job.description }} <br>
-        <br>
+        <h5 style="color: darkblue;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </h5>
+        Name: {{ job.name }} <br>
+        Description: {{ job.description }} <br>
         <div class="row" style="display: inline-block;">
-            {{ wtf.quick_form(form) }}
+            <form method="post" class="form" role="form">
+                {{ form.csrf_token }}
+                Rating: {{ form.rating }} <br>
+                Review: <br> {{ form.review(cols="70", rows="10") }} <br>
+                {{ form.submit }}
+            </form>
         </div>
     </div>
 </section>
