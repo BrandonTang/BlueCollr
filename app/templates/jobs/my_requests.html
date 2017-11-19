@@ -8,6 +8,17 @@ My Requests
 {% block about %}
 <section id="portfolio" style="margin-top: 5%;">
     <div class="container" style="text-align: center;">
+
+        <h5 style="color: darkblue;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </h5>
+
         <h2 class="text-center">My Requests</h2>
         <br>
 
@@ -17,8 +28,8 @@ My Requests
         <div style="width: 20%; margin: 0 auto;">
             {{ wtf.quick_form(form) }}
         </div>
-        <hr>
-        <h3 class="text-center">In Progress</h3>
+
+        <h3 class="text-center" style="margin-top: 5%;">In Progress</h3>
         {% if not accepted_jobs and not accepted_sorted %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
