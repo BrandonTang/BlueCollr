@@ -63,7 +63,8 @@ def edit_profile():
             f.save(path)
             old_path = current_user.picture_path
             current_user.picture_path = path[5:]
-            os.remove('./app' + old_path)
+            if old_path != "/static/img/userpics/default_pic.png":
+                os.remove('./app' + old_path)
         db.session.commit()
 
         flash('User information successfully updated!')
