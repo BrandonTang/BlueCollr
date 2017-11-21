@@ -42,7 +42,7 @@ Profile
         </div>
 
         <!--Shows completed jobs-->
-        <h3 class="text-center" style="margin-top: 5%;">Completed Jobs</h3>
+        <h3 class="text-center" style="margin-top: 5%;">{{ user.first_name }}'s Completed Jobs</h3>
         {% if not jobs_completed %}
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
@@ -52,8 +52,14 @@ Profile
             {% for job in jobs_completed %}
                 <hr>
                 <h5>{{ job.name }}</h5>
+                Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
+                Date Completed: {{ job.date_completed.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job.description }} <br>
+                {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job.price) }} <br>
+                {% endif %}
+                Street Name: {{ job.location }} <br>
+                Zip Code: {{ job.zipcode }} <br>
                 Rating: {{ job.rating }} <br>
                 Review: {{ job.review }} <br>
             {% endfor %}

@@ -34,6 +34,7 @@ def job(id):
                                        job_id=id,
                                        price=price_form.price.data)
             db.session.add(job_request)
+            db.session.add(job_request)
             db.session.commit()
             flash('Request has been sent!', category='success')
             return render_template('jobs/job.html', job=chosen_job, my_price=job_request.price)
@@ -431,9 +432,11 @@ def my_jobs():
 @login_required
 def accept_request(job_id, requestor_id):
     job = Job.query.filter_by(id=job_id).first()
+    job_request = JobRequestor.query.filter_by(job_id=job_id, requestor_id=requestor_id).first()
     if current_user.id == job.creator_id:
         job.accepted_id = requestor_id
         job.date_accepted = datetime.datetime.now()
+        job.price = job_request.price
         job.status = status.ACCEPTED
         db.session.commit()
         requestor = User.query.filter_by(id=requestor_id).first()
