@@ -36,11 +36,11 @@ def job(id):
             db.session.add(job_request)
             db.session.commit()
             flash('Request has been sent!', category='success')
-            return render_template('jobs/job.html', job=chosen_job)
+            return render_template('jobs/job.html', job=chosen_job, my_price=job_request.price)
 
         job_request = JobRequestor.query.filter_by(job_id=id, requestor_id=current_user.id).first()
         if job_request is not None:
-            return render_template('jobs/job.html', job=chosen_job)
+            return render_template('jobs/job.html', job=chosen_job, my_price=job_request.price)
 
         price_form.price.data = chosen_job.price
 
@@ -457,6 +457,15 @@ def quick_request(job_id, requestor_id):
         return redirect(url_for('jobs.browse'))
     flash("Please do not try to sign other people up for jobs!")
     return redirect(url_for('jobs.browse'))
+
+
+@jobs.route('/cancel_request/<int:job_id>', methods=['GET', 'POST'])
+@login_required
+def cancel_request(job_id):
+    JobRequestor.query.filter_by(job_id=job_id, requestor_id=current_user.id).delete()
+    db.session.commit()
+    flash("Request successfully cancelled!")
+    return job(job_id)
 
 
 @jobs.route('/review/<int:job_id>', methods=['GET', 'POST'])

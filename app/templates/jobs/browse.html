@@ -38,7 +38,7 @@ Browse Jobs
         <hr>
         <div class="row" style="display: inline-block; margin: 1%;">
             <h3>{{ job.name }}</h3>
-            Date Created: {{ job.date_created }} <br>
+            Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
             Description: {{ job.description }} <br>
             Price: {{ "$%.2f"|format(job.price) }} <br>
             Street Name: {{ job.location }} <br>
@@ -65,7 +65,7 @@ Browse Jobs
         <hr>
         <div class="row" style="display: inline-block; margin: 1%;">
             Name: {{ job[0].name }} <br>
-            Date Created: {{ job[0].date_created }} <br>
+            Date Created: {{ job[0].date_created.strftime('%m/%d/%Y') }} <br>
             Description: {{ job[0].description }} <br>
             Price: {{ "$%.2f"|format(job[0].price) }} <br>
             Street Name: {{ job[0].location }} <br>

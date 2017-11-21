@@ -41,7 +41,7 @@ My Requests
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job.name }}</h5>
-                Date Created: {{ job.date_created }} <br>
+                Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job.description }} <br>
                 {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job.price) }} <br>
@@ -61,7 +61,7 @@ My Requests
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job[0].name }}</h5>
-                Date Created: {{ job[0].date_created }} <br>
+                Date Created: {{ job[0].date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job[0].description }} <br>
                 {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job[0].price) }} <br>
@@ -92,12 +92,12 @@ My Requests
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job.name }}</h5>
-                Date Created: {{ job.date_created }} <br>
+                Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job.description }} <br>
                 {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job.price) }} <br>
                 {% endif %}
-                My Price: {{ "$%.2f"|format(requested_jobs[job]) }} <br>
+                Requested Price: {{ "$%.2f"|format(requested_jobs[job]) }} <br>
                 Street Name: {{ job.location }} <br>
                 Zip Code: {{ job.zipcode }} <br>
                 Status: {{ job.status }} <br>
@@ -113,7 +113,7 @@ My Requests
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job[0].name }}</h5>
-                Date Created: {{ job[0].date_created }} <br>
+                Date Created: {{ job[0].date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job[0].description }} <br>
                 {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
                 Price: {{ "$%.2f"|format(job[0].price) }} <br>

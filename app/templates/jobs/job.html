@@ -20,7 +20,7 @@
         </h5>
 
         <h2 class="text-center">{{ job.name }}</h2>
-        Date Created: {{ job.date_created }} <br>
+        Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
         Description: {{ job.description }} <br>
         {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}
         Price: {{ "$%.2f"|format(job.price) }} <br>
@@ -28,6 +28,14 @@
         Street Name: {{ job.location }} <br>
         Zip Code: {{ job.zipcode }} <br>
         Status: {{ job.status }} <br>
+        {% if my_price is defined %}
+        Requested Price: {{ "$%.2f"|format(my_price) }} <br>
+        <a href="{{ url_for('jobs.cancel_request', job_id=job.id) }}" class="btn btn-lg btn-outline"
+           style="background-color: #ff0000; color: white;">
+            <i class="fa fa-times"></i>
+            Cancel Request
+        </a>
+        {% endif %}
 
         {% if job.status == 'Pending' and form is defined %}
         <div style="width: 20%; margin: 0 auto;">

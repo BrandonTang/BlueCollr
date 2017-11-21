@@ -46,7 +46,7 @@ My Jobs
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job.name }}</h5>
-                Date Created: {{ job.date_created }} <br>
+                Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job.description }} <br>
                 Price: {{ "$%.2f"|format(job.price) }} <br>
                 Street Name: {{ job.location }} <br>
@@ -69,7 +69,7 @@ My Jobs
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job[0].name }}</h5>
-                Date Created: {{ job[0].date_created }} <br>
+                Date Created: {{ job[0].date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job[0].description }} <br>
                 Price: {{ "$%.2f"|format(job[0].price) }} <br>
                 Street Name: {{ job[0].location }} <br>
@@ -89,7 +89,6 @@ My Jobs
             </div>
             {% endfor %}
         {% endif %}
-        <hr>
 
         <h3 class="text-center" style="margin-top: 5%;">Pending</h3>
         {% if not pending_jobs and not pending_sorted %}
@@ -103,7 +102,7 @@ My Jobs
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job.name }}</h5>
-                Date Created: {{ job.date_created }} <br>
+                Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job.description }} <br>
                 Price: {{ "$%.2f"|format(job.price) }} <br>
                 Street Name: {{ job.location }} <br>
@@ -129,7 +128,7 @@ My Jobs
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job[0].name }}</h5>
-                Date Created: {{ job[0].date_created }} <br>
+                Date Created: {{ job[0].date_created.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job[0].description }} <br>
                 Price: {{ "$%.2f"|format(job[0].price) }} <br>
                 Street Name: {{ job[0].location }} <br>
@@ -152,7 +151,6 @@ My Jobs
             </div>
             {% endfor %}
         {% endif %}
-        <hr>
 
         <h3 class="text-center" style="margin-top: 5%;">Completed</h3>
         {% if not completed_jobs and not completed_sorted %}
@@ -166,8 +164,8 @@ My Jobs
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job.name }}</h5>
-                Date Created: {{ job.date_created }} <br>
-                Date Completed: {{ job.date_completed }} <br>
+                Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
+                Date Completed: {{ job.date_completed.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job.description }} <br>
                 Price: {{ "$%.2f"|format(job.price) }} <br>
                 Street Name: {{ job.location }} <br>
@@ -190,8 +188,8 @@ My Jobs
             <hr>
             <div class="row" style="display: inline-block; margin: 1%;">
                 <h5>{{ job[0].name }}</h5>
-                Date Created: {{ job[0].date_created }} <br>
-                Date Completed: {{ job[0].date_completed }} <br>
+                Date Created: {{ job[0].date_created.strftime('%m/%d/%Y') }} <br>
+                Date Completed: {{ job[0].date_completed.strftime('%m/%d/%Y') }} <br>
                 Description: {{ job[0].description }} <br>
                 Price: {{ "$%.2f"|format(job[0].price) }} <br>
                 Street Name: {{ job[0].location }} <br>
