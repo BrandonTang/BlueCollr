@@ -20,6 +20,10 @@
         </h5>
 
         <h2 class="text-center">{{ job.name }}</h2>
+        Creator:
+        <a href="{{ url_for('profile.view_profile', user_id=creator.id) }}">
+            {{ creator.first_name }} {{ creator.last_name }}
+        </a><br>
         Date Created: {{ job.date_created.strftime('%m/%d/%Y') }} <br>
         Description: {{ job.description }} <br>
         {% if job.status == 'Pending' or current_user.id == job.creator_id or current_user.id == job.accepted_id %}

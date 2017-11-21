@@ -17,6 +17,7 @@ from flask_googlemaps import Map
 @login_required
 def job(id):
     chosen_job = Job.query.filter_by(id=id).first()
+    creator = User.query.filter_by(id=chosen_job.creator_id).first()
     if chosen_job.status == status.PENDING and chosen_job.creator_id == current_user.id:
         job_requests = JobRequestor.query.filter_by(job_id=id).all()
         requestors = {}
@@ -24,7 +25,7 @@ def job(id):
             requestor = User.query.filter_by(id=query.requestor_id).first()
             requestors[requestor] = query.price
 
-        return render_template('jobs/job.html', job=chosen_job, requestors=requestors)
+        return render_template('jobs/job.html', job=chosen_job, creator=creator, requestors=requestors)
 
     elif chosen_job.status == status.PENDING:
         price_form = PriceForm()
@@ -37,22 +38,22 @@ def job(id):
             db.session.add(job_request)
             db.session.commit()
             flash('Request has been sent!', category='success')
-            return render_template('jobs/job.html', job=chosen_job, my_price=job_request.price)
+            return render_template('jobs/job.html', job=chosen_job, creator=creator, my_price=job_request.price)
 
         job_request = JobRequestor.query.filter_by(job_id=id, requestor_id=current_user.id).first()
         if job_request is not None:
-            return render_template('jobs/job.html', job=chosen_job, my_price=job_request.price)
+            return render_template('jobs/job.html', job=chosen_job, creator=creator, my_price=job_request.price)
 
         price_form.price.data = chosen_job.price
 
-        return render_template('jobs/job.html', job=chosen_job, form=price_form)
+        return render_template('jobs/job.html', job=chosen_job, creator=creator, form=price_form)
 
     elif chosen_job.status != status.PENDING:
         acceptor = User.query.filter_by(id=chosen_job.accepted_id).first()
 
-        return render_template('jobs/job.html', job=chosen_job, acceptor=acceptor)
+        return render_template('jobs/job.html', job=chosen_job, creator=creator, acceptor=acceptor)
 
-    return render_template('jobs/job.html', job=chosen_job)
+    return render_template('jobs/job.html', job=chosen_job, creator=creator)
 
 
 @jobs.route('/create', methods=['GET', 'POST'])
