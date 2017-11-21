@@ -64,5 +64,14 @@ def fixdb():
     db.session.commit()
 
 
+@manager.command
+def emptydb():
+    """deletes all entries in the database"""
+    JobRequestor.query().delete()
+    Job.query().delete()
+    User.query().delete()
+    db.session.commit()
+
+
 if __name__ == '__main__':
     manager.run()
