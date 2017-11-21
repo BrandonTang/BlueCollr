@@ -433,6 +433,7 @@ def my_jobs():
 @login_required
 def accept_request(job_id, requestor_id):
     job = Job.query.filter_by(id=job_id).first()
+    creator = User.query.filter_by(id=job.creator_id).first()
     job_request = JobRequestor.query.filter_by(job_id=job_id, requestor_id=requestor_id).first()
     if current_user.id == job.creator_id:
         job.accepted_id = requestor_id
@@ -442,7 +443,7 @@ def accept_request(job_id, requestor_id):
         db.session.commit()
         requestor = User.query.filter_by(id=requestor_id).first()
         flash("Request for job successfully accepted!")
-        return render_template('jobs/job.html', job=job, acceptor=requestor)
+        return render_template('jobs/job.html', job=job, acceptor=requestor, creator=creator)
     flash("Please do not try to accept jobs for other people!")
     return url_for('jobs/job.html', job=job)
 
