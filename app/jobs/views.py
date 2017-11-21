@@ -94,7 +94,7 @@ def browse():
     other_jobs = list(set(Job.query.filter_by(status=status.PENDING).all()) - set(requested_jobs) - set(my_own_jobs))
     form = ZipFilterForm()
     markers_list = [{
-        'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        'icon': '/static/img/icons/hq.png',
         'lat': 40.6939904,
         'lng': -73.98656399999999,
         'infobox': "BlueCollr HQ"
@@ -107,7 +107,7 @@ def browse():
         link = "/jobs/job/" + str(job.id)
         latitude = job.latitude
         longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+        markers_list.append({'icon': '/static/img/icons/open.png',
                              'lat': latitude,
                              'lng': longitude,
                              'infobox': ("Job Name: " + name +
@@ -174,7 +174,7 @@ def my_requests():
 
     form = ZipFilterForm()
     markers_list = [{
-        'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        'icon': '/static/img/icons/hq.png',
         'lat': 40.6939904,
         'lng': -73.98656399999999,
         'infobox': "BlueCollr HQ"
@@ -187,7 +187,7 @@ def my_requests():
         link = "/jobs/job/" + str(job.id)
         latitude = job.latitude
         longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+        markers_list.append({'icon': '/static/img/icons/accepted.png',
                              'lat': latitude,
                              'lng': longitude,
                              'infobox': ("Job Name: " + name +
@@ -204,7 +204,7 @@ def my_requests():
         link = "/jobs/job/" + str(job.id)
         latitude = job.latitude
         longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+        markers_list.append({'icon': '/static/img/icons/pending.png',
                              'lat': latitude,
                              'lng': longitude,
                              'infobox': ("Job Name: " + name +
@@ -298,7 +298,7 @@ def my_jobs():
 
     form = ZipFilterForm()
     markers_list = [{
-        'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        'icon': '/static/img/icons/hq.png',
         'lat': 40.6939904,
         'lng': -73.98656399999999,
         'infobox': "BlueCollr HQ"
@@ -311,7 +311,7 @@ def my_jobs():
         link = "/jobs/job/" + str(job.id)
         latitude = job.latitude
         longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+        markers_list.append({'icon': '/static/img/icons/accepted.png',
                              'lat': latitude,
                              'lng': longitude,
                              'infobox': ("Job Name: " + name +
@@ -328,7 +328,7 @@ def my_jobs():
         link = "/jobs/job/" + str(job.id)
         latitude = job.latitude
         longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+        markers_list.append({'icon': '/static/img/icons/pending.png',
                              'lat': latitude,
                              'lng': longitude,
                              'infobox': ("Job Name: " + name +
@@ -345,7 +345,7 @@ def my_jobs():
         link = "/jobs/job/" + str(job.id)
         latitude = job.latitude
         longitude = job.longitude
-        markers_list.append({'icon': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+        markers_list.append({'icon': '/static/img/icons/completed.png',
                              'lat': latitude,
                              'lng': longitude,
                              'infobox': ("Job Name: " + name +

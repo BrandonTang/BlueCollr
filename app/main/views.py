@@ -10,7 +10,7 @@ from flask_googlemaps import Map
 @main.route('/')
 def index():
     markers_list = [{
-        'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        'icon': '/static/img/icons/hq.png',
         'lat': 40.6939904,
         'lng': -73.98656399999999,
         'infobox': "BlueCollr HQ"
@@ -26,11 +26,11 @@ def index():
         latitude = job.latitude
         longitude = job.longitude
         if job.status == status.PENDING:
-            icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+            icon = '/static/img/icons/open.png'
         elif job.status == status.ACCEPTED:
-            icon = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+            icon = '/static/img/icons/accepted.png'
         else:
-            icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            icon = '/static/img/icons/completed.png'
         markers_list.append({'icon': icon,
                              'lat': latitude,
                              'lng': longitude,
