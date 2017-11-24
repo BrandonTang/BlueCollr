@@ -67,10 +67,32 @@ def fixdb():
 @manager.command
 def emptydb():
     """deletes all entries in the database"""
-    JobRequestor.query().delete()
-    Job.query().delete()
-    User.query().delete()
-    db.session.commit()
+
+    try:
+        # clear all requestors
+        jobRequestors = JobRequestor.query.all()
+        for jobRequestor in jobRequestors:
+            db.session.delete(jobRequestor)
+
+        # clear all jobs
+        jobs = Job.query.all()
+        for job in jobs:
+            db.session.delete(job)
+
+        # clear all users
+        users = User.query.all()
+        for user in users:
+            db.session.delete(user)
+
+        # save and inform
+        db.session.commit()
+        print("Database tables cleared -- success")
+
+    except Exception as e:
+
+        # error notify
+        print("Database tables cleared -- failed")
+        print("Error: %s" % e)
 
 
 if __name__ == '__main__':
