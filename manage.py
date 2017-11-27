@@ -1,6 +1,5 @@
 import os
 from app import create_app, db
-# from app.models import User
 from flask import Flask
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
@@ -46,7 +45,7 @@ def test():
 
 @manager.command
 def fixdb():
-    """fixes spelling errors in the db from before constants was implemented"""
+    """Fixes spelling errors in the db from before constants are implemented."""
     jobs = Job.query.all()
     for job in jobs:
         job.status = status.PENDING
@@ -70,42 +69,37 @@ def fixdb():
 
 @manager.command
 def emptydb():
-    """deletes all entries in the database"""
-
+    """Deletes all entries in the database."""
     try:
-        # clear all requestors
+        # Clear all requestors
         jobRequestors = JobRequestor.query.all()
         for jobRequestor in jobRequestors:
             db.session.delete(jobRequestor)
 
-        # clear all jobs
+        # Clear all jobs
         jobs = Job.query.all()
         for job in jobs:
             db.session.delete(job)
 
-        # clear all users
+        # Clear all users
         users = User.query.all()
         for user in users:
             db.session.delete(user)
 
-        # save and inform
         db.session.commit()
-        print("Database tables cleared -- success")
+        print("Emptied database! -- SUCCESS")
 
     except Exception as e:
-
-        # error notify
-        print("Database tables cleared -- failed")
+        print("Error emptying database! -- FAILED")
         print("Error: %s" % e)
 
 
 @manager.command
 def populatedb():
-    """fills database with fake 'real' data"""
-
+    """Fills database with fake data."""
     default_password = 'Password1'
 
-    # Create 4 users
+    # Create users
     user1 = User(email='sahir.karani@gmail.com',
                 password=default_password,
                 first_name='Sahir',
@@ -134,28 +128,24 @@ def populatedb():
                  picture_path="/static/img/userpics/default_pic.png",
                  validated=True)
 
+    # Add users to database
     try:
-        # add users
         db.session.add(user1)
         db.session.add(user2)
         db.session.add(user3)
         db.session.add(user4)
 
         db.session.commit()
-
-        # notify
-        print("Added users")
+        print("Added users! -- SUCCESS")
 
     except Exception as e:
-
-        # error notify
-        print("Error adding users")
+        print("Error adding users! -- FAILED")
         print("Error: %s" % e)
 
     gmaps = googlemaps.Client(key=app.config['MAPS_API'])
     geocode_result = gmaps.geocode('1600 Pennsylvania Ave' + ", " + str(20500))
     job1 = Job(name='Insulation Replacement',
-               description='Need to replace the insulation in my basement',
+               description='Need to replace the insulation in my basement.',
                price=150,
                status=status.PENDING,
                location='1600 Pennsylvania Ave',
@@ -167,7 +157,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('11 Wall Street' + ", " + str(10005))
     job2 = Job(name='Bathroom Renovation',
-               description='Need to redecorate my upstairs bathroom',
+               description='Need to redecorate my upstairs bathroom.',
                price=500,
                status=status.PENDING,
                location='11 Wall Street',
@@ -179,7 +169,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('N 6th St & Market St' + ", " + str(19106))
     job3 = Job(name='Kitchen Sink Leaking',
-               description='Need someone to snake my pipes',
+               description='Need someone to snake my pipes.',
                price=150,
                status=status.PENDING,
                location='N 6th St & Market St',
@@ -191,7 +181,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('50 W 10th St' + ", " + str(10011))
     job4 = Job(name='Raking Leaves',
-               description='Need to rake leaves in backyard',
+               description='Need to rake leaves in backyard.',
                price=90,
                status=status.PENDING,
                location='50 W 10th St',
@@ -203,7 +193,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('77 Saint Marks Place' + ", " + str(10003))
     job5 = Job(name='Build a swing set',
-               description='Need help building swing set',
+               description='Need help building swing set.',
                price=500,
                status=status.PENDING,
                location='77 Saint Marks Place',
@@ -215,7 +205,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('778 Park Avenue' + ", " + str(10021))
     job6 = Job(name='Painting',
-               description='Need to paint my walls bright pink',
+               description='Need to paint my walls bright pink.',
                price=100,
                status=status.PENDING,
                location='778 Park Avenue',
@@ -227,7 +217,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('419 West 115th Street' + ", " + str(10025))
     job7 = Job(name='Moving Furniture',
-               description='Need help packing furniture onto moving truck',
+               description='Need help packing furniture onto moving truck.',
                price=300,
                status=status.PENDING,
                location='419 West 115th Street',
@@ -239,7 +229,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('441 East 9th Street' + ", " + str(10009))
     job8 = Job(name='Demolition',
-               description='Need to tear down wall',
+               description='Need to tear down wall.',
                price=200,
                status=status.PENDING,
                location='441 East 9th Street',
@@ -251,7 +241,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('45 West 10th Street' + ", " + str(10011))
     job9 = Job(name='Replacing wood flooring',
-               description='Need someone to replace wood flooring',
+               description='Need someone to replace wood flooring.',
                price=1000,
                status=status.PENDING,
                location='45 West 10th Street',
@@ -261,8 +251,8 @@ def populatedb():
                creator_id=user3.id,
                date_created=datetime.now())
 
+    # Add jobs to database
     try:
-        # add jobs
         db.session.add(job1)
         db.session.add(job2)
         db.session.add(job3)
@@ -272,20 +262,15 @@ def populatedb():
         db.session.add(job7)
         db.session.add(job8)
         db.session.add(job9)
-
-        # notify
-        print("Added jobs")
+        print("Added jobs! -- SUCCESS")
 
     except Exception as e:
-
-        # error notify
-        print("Error adding jobs")
+        print("Error adding jobs! -- FAILED")
         print("Error: %s" % e)
 
     # Create job_requestors
     users = User.query.all()
     jobs = Job.query.all()
-
     for user in users:
         for job in jobs:
             x = random.randint(1,101)
@@ -295,10 +280,10 @@ def populatedb():
                                            price=job.price)
                 db.session.add(job_request)
 
-    # hard coded jobs for demo
+    # Create hard coded jobs for demo
     geocode_result = gmaps.geocode('185 Montague Street' + ", " + str(11201))
     job10 = Job(name='Fix Heating',
-               description='I need someone who can fix my heater. It is broken and it is getting cold out',
+               description='I need someone who can fix my heater. It is broken and it is getting cold out!',
                price=3945,
                status=status.PENDING,
                location='185 Montague Street',
@@ -311,7 +296,7 @@ def populatedb():
     geocode_result = gmaps.geocode('100 Willoughby St' + ", " + str(11201))
     job11 = Job(name='Redo Sidewalk',
                 description='The sidewalk is broken due to some construction going on. I would like someone to fix it '
-                            'ASAP, price is negotiable',
+                            'ASAP, price is negotiable.',
                 price=3945,
                 status=status.ACCEPTED,
                 location='100 Willoughby St',
@@ -325,7 +310,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('49 Flatbush Ave Ext' + ", " + str(11201))
     job12 = Job(name='Clean The Roof',
-                description='The roof has many leaves and garbage everywhere. I would like you to clean it.',
+                description='The roof has many leaves and garbage everywhere. I would like someone to clean it.',
                 price=70,
                 status=status.COMPLETED,
                 location='49 Flatbush Ave Ext',
@@ -342,7 +327,7 @@ def populatedb():
 
     geocode_result = gmaps.geocode('240 Jay St' + ", " + str(11201))
     job13 = Job(name='Repaint Walls',
-                description='I need someone to repaint the walls of my home. I will provide paint.',
+                description='I need someone to repaint the walls of my home. Paint will be provided.',
                 price=500,
                 status=status.COMPLETED,
                 location='240 Jay St',
@@ -391,7 +376,7 @@ def populatedb():
     geocode_result = gmaps.geocode('336 State St' + ", " + str(11217))
     job16 = Job(name='Hang Photo',
                 description='Need a handy person to hang up a photo. Bring a drill please!',
-                price=10,
+                price=30,
                 status=status.PENDING,
                 location='185 Montague Street',
                 longitude=round(geocode_result[0]['geometry']['location']['lng'], 6),
@@ -400,8 +385,8 @@ def populatedb():
                 creator_id=user2.id,
                 date_created=datetime.now())
 
+    # Add hard coded jobs to database
     try:
-        # add jobs
         db.session.add(job10)
         db.session.add(job11)
         db.session.add(job12)
@@ -409,16 +394,11 @@ def populatedb():
         db.session.add(job14)
         db.session.add(job15)
         db.session.add(job16)
-
         db.session.commit()
-
-        # notify
-        print("Added hard coded jobs")
+        print("Added hard coded jobs! -- SUCCESS")
 
     except Exception as e:
-
-        # error notify
-        print("Error adding hard coded jobs")
+        print("Error adding hard coded jobs! -- FAILED")
         print("Error: %s" % e)
 
 
