@@ -101,11 +101,11 @@ def populatedb():
 
     # Create users
     user1 = User(email='sahir.karani@gmail.com',
-                password=default_password,
-                first_name='Sahir',
-                last_name='Karani',
-                picture_path="/static/img/userpics/default_pic.png",
-                validated=True)
+                 password=default_password,
+                 first_name='Sahir',
+                 last_name='Karani',
+                 picture_path="/static/img/userpics/default_pic.png",
+                 validated=True)
 
     user2 = User(email='matthew.laikhram@gmail.com',
                  password=default_password,
@@ -141,6 +141,7 @@ def populatedb():
     except Exception as e:
         print("Error adding users! -- FAILED")
         print("Error: %s" % e)
+        sys.exit(1)
 
     gmaps = googlemaps.Client(key=app.config['MAPS_API'])
     geocode_result = gmaps.geocode('1600 Pennsylvania Ave' + ", " + str(20500))
@@ -267,13 +268,14 @@ def populatedb():
     except Exception as e:
         print("Error adding jobs! -- FAILED")
         print("Error: %s" % e)
+        sys.exit(1)
 
     # Create job_requestors
     users = User.query.all()
     jobs = Job.query.all()
     for user in users:
         for job in jobs:
-            x = random.randint(1,101)
+            x = random.randint(1, 101)
             if x < 50 and user.id != job.creator_id:
                 job_request = JobRequestor(requestor_id=user.id,
                                            job_id=job.id,
@@ -283,15 +285,15 @@ def populatedb():
     # Create hard coded jobs for demo
     geocode_result = gmaps.geocode('185 Montague Street' + ", " + str(11201))
     job10 = Job(name='Fix Heating',
-               description='I need someone who can fix my heater. It is broken and it is getting cold out!',
-               price=3945,
-               status=status.PENDING,
-               location='185 Montague Street',
-               longitude=round(geocode_result[0]['geometry']['location']['lng'], 6),
-               latitude=round(geocode_result[0]['geometry']['location']['lat'], 6),
-               zipcode=11201,
-               creator_id=user1.id,
-               date_created=datetime.now())
+                description='I need someone who can fix my heater. It is broken and it is getting cold out!',
+                price=3945,
+                status=status.PENDING,
+                location='185 Montague Street',
+                longitude=round(geocode_result[0]['geometry']['location']['lng'], 6),
+                latitude=round(geocode_result[0]['geometry']['location']['lat'], 6),
+                zipcode=11201,
+                creator_id=user1.id,
+                date_created=datetime.now())
 
     geocode_result = gmaps.geocode('100 Willoughby St' + ", " + str(11201))
     job11 = Job(name='Redo Sidewalk',
@@ -400,6 +402,7 @@ def populatedb():
     except Exception as e:
         print("Error adding hard coded jobs! -- FAILED")
         print("Error: %s" % e)
+        sys.exit(1)
 
 
 if __name__ == '__main__':
