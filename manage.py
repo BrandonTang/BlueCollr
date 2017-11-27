@@ -1,14 +1,15 @@
-import os
 from app import create_app, db
+from app.constants import status
+
+import os
+import googlemaps
+import datetime
+import random
 from flask import Flask
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
 from flask_googlemaps import GoogleMaps
-from app.constants import status
-import googlemaps
-import datetime
-import random
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -107,17 +108,17 @@ def populatedb():
                  picture_path="/static/img/userpics/default_pic.png",
                  validated=True)
 
-    user2 = User(email='matthew.laikhram@gmail.com',
-                 password=default_password,
-                 first_name='Matthew',
-                 last_name='Laikhram',
-                 picture_path="/static/img/userpics/default_pic.png",
-                 validated=True)
-
-    user3 = User(email='brandon.tang@gmail.com',
+    user2 = User(email='brandon.tang@gmail.com',
                  password=default_password,
                  first_name='Brandon',
                  last_name='Tang',
+                 picture_path="/static/img/userpics/default_pic.png",
+                 validated=True)
+
+    user3 = User(email='matthew.laikhram@gmail.com',
+                 password=default_password,
+                 first_name='Matthew',
+                 last_name='Laikhram',
                  picture_path="/static/img/userpics/default_pic.png",
                  validated=True)
 
